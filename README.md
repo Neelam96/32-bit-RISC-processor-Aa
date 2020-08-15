@@ -1,4 +1,4 @@
-# RISC-processor-8-bit-Aa
+# 32-bit-RISC-processor-Aa
 EE 789 Assignment 2: Design of a RISC-type, 6-stage pipeline processor in Aa (AHIR Algorithmic) language
 
 ## Given ISA
