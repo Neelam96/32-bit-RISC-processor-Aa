@@ -1,0 +1,17 @@
+digraph data_path {
+  ADD_u32_u32_196_wire [shape=ellipse];
+  data_in_192 [shape=ellipse];
+  data_in_mem_188 [shape=ellipse];
+  konst_195_wire_constant [shape=ellipse];
+  ADD_u32_u32_196_inst [shape=rectangle];
+data_in_192  -> ADD_u32_u32_196_inst;
+konst_195_wire_constant  -> ADD_u32_u32_196_inst;
+ADD_u32_u32_196_inst -> ADD_u32_u32_196_wire;
+  RPIPE_request_to_mem_187_inst [shape=rectangle];
+RPIPE_request_to_mem_187_inst -> data_in_mem_188;
+  WPIPE_response_from_mem_193_inst [shape=rectangle];
+ADD_u32_u32_196_wire  -> WPIPE_response_from_mem_193_inst;
+  slice_191_inst [shape=rectangle];
+data_in_mem_188  -> slice_191_inst;
+slice_191_inst -> data_in_192;
+}

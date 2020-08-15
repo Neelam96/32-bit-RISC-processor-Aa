@@ -1,0 +1,310 @@
+$constant HALT: $uint<8> := 1
+$constant SBIR: $uint<8> := 2
+$constant LOAD: $uint<8> := 3
+$constant STORE: $uint<8> := 4
+$constant L_AND: $uint<8> := 5
+$constant L_OR: $uint<8> := 6
+$constant L_XNOR: $uint<8> := 7
+$constant L_XOR: $uint<8> := 8
+$constant ADD: $uint<8> := 9
+$constant SUB: $uint<8> := 10
+$constant L_SLL: $uint<8> := 11
+$constant L_SRL: $uint<8> := 12
+$constant L_SRA: $uint<8> := 13
+$constant BZ: $uint<8> := 14
+$constant BN: $uint<8> := 15
+$constant CALL: $uint<8> := 16
+$constant JMP: $uint<8> := 17
+$constant CMP: $uint<8> := 18 	//assumed
+
+//	---------------------------- check instruction decoding always ----------------------------------
+
+$constant one_1: $uint<1> := 1
+$constant zero_1: $uint<1> := 0
+$constant zero_10: $uint<10> := 0
+$constant zero_23: $uint<23> := 0
+$constant zero_24: $uint<24> := 0
+$constant seven_8: $uint<8> := 7
+
+$constant uart_addr: $uint<8> := 254
+
+$constant one_10: $uint<10> := 1
+$constant one_8: $uint<8> := 1
+
+$constant byte_mask_3_bytes: $uint<32> := 4294967040
+$constant zero_32: $uint<32> := 0
+$constant zero_33: $uint<33> := 0
+$constant write_signal: $uint<1> := 0
+$constant read_signal: $uint<1> := 1
+
+$constant minus_1 : $uint<32> := 4294967295
+$constant one_32 :  $uint<32> := 1
+
+$storage reg_array: $array[64] $of $uint<32>	
+//$storage mem_array: $array[256] $of $uint<32>			//mem_array[0...511] is instruction and mem_array[512...1023] is data
+
+//$storage pc: $uint<8>
+
+
+$pipe out_pipe: $uint<8> $depth 8 
+$pipe in_pipe: $uint<8> $depth 32 
+
+
+$pipe mem_in: $uint<64> $depth 8
+$pipe mem_out: $uint<32> $depth 8
+
+$pipe processor_result: $uint<32> $depth 2
+
+//------------------------------------requests to bridge -----------------------------------------
+$pipe request_to_bridge: $uint<64> $depth 8
+$pipe response_from_bridge: $uint<32> $depth 8
+
+$pipe start_processor: $uint<8> $signal
+
+$module [memory_daemon] $in() $out() $is
+{
+	data_in_mem := mem_in
+	$split (data_in_mem 1  8 23 32) (r_w  addr unused data_in)
+	mem_out := (data_in + 1)
+
+}
+
+$module [send_to_uart] $in (data_to_send: $uint<32> ) $out () $is
+{
+	
+	
+	 $split (data_to_send  8 8 8 8) (out_data_0 out_data_1 out_data_2 out_data_3)
+	out_pipe := out_data_0
+	out_pipe := out_data_1
+	out_pipe := out_data_2
+	out_pipe := out_data_3
+
+
+
+
+}
+
+$module [receive_from_uart] $in () $out (receive_data_from_uart: $uint<32> ) $is
+{
+	
+
+	in_data0 := in_pipe
+	in_data1 := in_pipe
+	in_data2 := in_pipe
+	in_data3 := in_pipe
+
+	 receive_data_from_uart := ($concat in_data0 in_data1 in_data2 in_data3)
+
+}
+
+//$module [bridge]
+ //$in ()
+ //$out () $is
+ //{
+ 	//$branchblock [loop] {
+ 	//$dopipeline $depth 20 $buffering 2 $fullrate
+
+ 			
+
+	//$merge $entry $loopback
+		//$phi request_to_bridge_inside_bridge := request_to_bridge $on $entry , $loopback
+	 //$endmerge
+
+		//cmd := request_to_bridge
+		//$rreport (bridge data_bridge request_to_bridge_inside_bridge)
+		//$volatile $split (request_to_bridge_inside_bridge 1 23 8 32) (r_w unused addr data_in)
+
+		//$volatile is_uart_addr := ($mux (addr == uart_addr) one_1 zero_1)
+
+		//$guard (is_uart_addr)  $call send_to_uart (data_in ) ()
+		//$guard (is_uart_addr) $call receive_from_uart () (data_out_uart)
+		////$guard (is_uart_addr) response_from_bridge := data_out_uart
+
+		//$guard (~is_uart_addr) mem_in := request_to_bridge_inside_bridge //try doing mark and synch
+		//$guard (~is_uart_addr) response_from_mem_inside_bridge := mem_out
+
+		//response_from_bridge := ($mux is_uart_addr data_out_uart mem_out_inside_bridge)
+
+		//$while 1
+	//}
+
+ //}
+
+ $pipeline $depth 7 $module [registerFileModule]
+ $in (valid_1: $uint<1>  addr_1: $uint<8> valid_2: $uint<1> addr_2: $uint<8> valid_w: $uint<1> addr_w: $uint<8> data_to_be_written: $uint<32>)
+ $out (read_data_1: $uint<32> read_data_2: $uint<32> ) $is
+ {
+	
+
+
+ 	$guard (valid_1) t_read_data_1 := reg_array[addr_1]
+ 	$guard (valid_2) t_read_data_2 := reg_array[addr_2]
+
+ 	read_data_1 := ($mux valid_1 t_read_data_1 0)
+ 	read_data_2 := ($mux valid_2 t_read_data_2 0)
+
+ 	$guard (valid_w) reg_array[addr_w] := data_to_be_written
+
+
+
+}
+
+
+ $module [cal_Next_program_cnt] $in (opcode: $uint<8> rd1: $uint<32> rd2: $uint<32> program_cnt: $uint<8> is_rs1_neg: $uint<1>) $out (n_program_cnt: $uint<8>) $is
+{
+	
+
+	$volatile is_Branch := ($reduce | ($reduce & (opcode == BZ)  (~is_rs1_neg)) ($reduce & (opcode == BN)  is_rs1_neg))
+
+	$volatile normalFlow := (~($reduce | is_Branch (opcode == CALL) (opcode == JMP)))
+	$volatile $split (rd1 24 8) (unused1 addr1)
+	$volatile $split (rd2 24 8) (unused2 addr2)
+
+	$volatile n_program_cnt := ($excmux 
+											(opcode == CALL) addr1
+											(opcode == JMP) addr1
+											(is_Branch == one_1) addr2
+											(normalFlow == one_1) (program_cnt + 1)
+											)
+	//$rreport(cal_Next_program_cnt status program_cnt n_program_cnt opcode is_Branch normalFlow addr1 addr2 is_rs1_neg)
+
+}
+
+$module [processor] $in () $out () $is
+{
+	$branchblock [check_start] {
+		$merge $entry check_for_start $endmerge
+
+		cmd := start_processor     
+		$if (cmd == one_8) $then
+
+			$branchblock [loop] {
+
+				$dopipeline $depth 20 $buffering 2 $fullrate
+				$merge $entry $loopback
+					$phi program_cnt := _b00000000 $on $entry n_program_cnt $on $loopback
+					
+					$phi carry := zero_32 $on $entry n_carry $on $loopback
+				$endmerge
+
+
+				
+				//---------------------- Accessing mem through pipe ---------------------------------------
+				mem_in := ($concat read_signal program_cnt zero_23 zero_32)
+				instruction := mem_out
+				
+				//-----------------------------------------------------------------------------------------
+				$volatile $split (instruction 8 8 8 8) (opcode rs1_imm rs2 rd)
+
+				$call registerFileModule (one_1 rs1_imm one_1 rs2 zero_1 rd zero_32) (rd1 rd2)
+
+ 				n_carry := ($mux (program_cnt == seven_8) one_32 zero_32)
+				
+				
+				$volatile $split(rd1 1 31) (is_rs1_neg unused_bits)
+
+
+				$call cal_Next_program_cnt (opcode rd1 rd2 program_cnt is_rs1_neg) (n_program_cnt)
+				 pc := n_program_cnt
+
+				 $rreport (processor status instruction rd1 rd2 n_program_cnt)
+				 exec_result_init := ($excmux 
+				 							(opcode == ADD) (rd1 + rd2) 
+											(opcode == SBIR) ($concat zero_24 rs1_imm)
+											(opcode == L_AND) (rd1 & rd2)
+											(opcode == L_OR) (rd1 | rd2)
+											(opcode == L_XNOR) (rd1 ~^ rd2)
+											(opcode == L_XOR) (rd1 ^ rd2)
+											(opcode == ADD) (rd1 + rd2)
+											(opcode == SUB) (rd1 - rd2)
+											(opcode == L_SLL) ($bitcast ($uint<32>) (rd1 << rd2))
+											(opcode == L_SRL ) ($bitcast ($uint<32>) (rd1 >> rd2))
+											(opcode == L_SRA) ($bitcast ($uint<32>) (rd1 >> rd2)) //check for arithmetic right shift
+											(opcode == CMP) ($excmux (rd1 == rd2) zero_32 
+																	(rd1 < rd2) minus_1
+																	 (rd1 >rd2) one_32)
+											//$default ($bitcast ($uint<32>) 0)
+											)
+				 //$rreport (processor status1  instruction) //$rreport (processor status instruction rd1 rd2 n_program_cnt exec_result_init)
+
+				//$volatile is_add := one_1//($mux (opcode == ADD) one_1 zero_1)
+
+				 //rd1_33 := ($bitcast ($uint<33>) rd1) //$guard (is_add) rd1_33 := ($bitcast ($uint<33>) rd1)
+				 //rd2_33 := ($bitcast ($uint<33>) rd2) //$guard (is_add) rd2_33 := ($bitcast ($uint<33>) rd2)
+
+				 //add_result_33 := ($bitcast ($uint<33>) (carry + (rd1_33 + rd2_33))) //$guard (is_add) add_result_33 := ($bitcast ($uint<33>) (carry + (rd1_33 + rd2_33)))
+				 //add_result_32 := ($bitcast ($uint<32>) add_result_33)//$guard (is_add) add_result_32 := ($bitcast ($uint<32>) add_result_33)
+				 //n_carry := ($mux (opcode == ADD) (add_result_33 >>32) carry)
+
+				 $volatile exec_result := ($mux (opcode == ADD) (exec_result_init + carry) exec_result_init)
+
+				$volatile memWrite := ($mux (opcode == STORE) zero_1 one_1)
+				//$volatile regWrite := ($reduce | is_sbir is_load is_and is_or is_xnor is_add is_sub is_sll is_srl is_sra is_call is_cmp)
+				$volatile regWrite := ($reduce | (opcode == SBIR) (opcode == LOAD) (opcode == L_AND) (opcode == L_OR) (opcode == L_XNOR) (opcode == ADD) (opcode == SUB) (opcode == L_SLL) (opcode == L_SRL) (opcode == L_SRA) (opcode == CALL) (opcode == CMP))
+
+
+				//--------------------------------------------------------------------------------------
+				////$volatile $split (rd1 22 10) (unused memAddr)
+				memAddr :=  ($slice rd1 7 0)							//this loads the data corresponding to address specified by 2nd byte
+				//request_to_bridge := ($concat memWrite memAddr zero_23 rd2) 
+				//memReadData := response_from_bridge
+
+				$volatile is_uart_addr := ($mux (memAddr == uart_addr) one_1 zero_1)
+
+				$guard (~is_uart_addr) mem_in := ($concat memWrite memAddr zero_23 rd2)
+				$guard (~is_uart_addr) memReadData := mem_out
+
+
+				$guard (is_uart_addr) $call receive_from_uart () (data_from_uart)
+
+				
+				$rreport (processor uart data_from_uart)
+
+				$volatile write_to_uart := is_uart_addr//($reduce & is_uart_addr regWrite memWrite)
+
+				//received_data_from_uart := data_from_uart //-----------change 1
+
+				////$call accessMem (memWrite memAddr rd2) (memReadData)
+				//--------------------------------------------------------------------------------------
+
+				
+				$volatile program_cnt_1 := (program_cnt + 1)
+
+				 regWriteData := ($prioritymux
+											(opcode == LOAD) memReadData
+											(opcode == CALL) ($bitcast ($uint<32>) program_cnt_1)
+											(regWrite == one_1) exec_result
+											$default ($bitcast ($uint<32>) 0)
+											)
+
+				//$rreport (processor status rd1 rd2 regWriteData regWrite memWrite opcode program_cnt instruction is_rs1_neg memReadData memAddr)
+
+				$call registerFileModule (zero_1 rs1_imm zero_1 rs2 regWrite rd regWriteData) (read_while_write1 read_while_write2)
+				
+				//processor_result := ($prioritymux 
+										//(regWrite == one_1) regWriteData
+										//(memWrite == zero_1) rd2
+										//(opcode == BZ) rd2
+										//(opcode == BN) rd2
+										//(opcode == JMP) rd1
+										//$default ($bitcast ($uint<32>) 0)
+										//)
+				//--------------------------------------------------------------------
+				data_to_send_uart := ($mux (opcode == STORE) rd2 regWriteData) 
+
+				$call send_to_uart (data_to_send_uart) () //$guard (write_to_uart) $call send_to_uart (regWriteData) ()  //-----------change 2
+
+
+				//--------------------------------------------------------------------
+				
+
+			$while (~(opcode == HALT))
+			}
+
+
+		$place [check_for_start]
+		$endif
+	}
+
+}
+

@@ -1,0 +1,201 @@
+$constant  ADD : $uint<8>:= 9  
+$constant  BN : $uint<8>:= 15  
+$constant  BZ : $uint<8>:= 14  
+$constant  CALL : $uint<8>:= 16  
+$constant  CMP : $uint<8>:= 18  
+$constant  HALT : $uint<8>:= 1  
+$constant  JMP : $uint<8>:= 17  
+$constant  LOAD : $uint<8>:= 3  
+$constant  L_AND : $uint<8>:= 5  
+$constant  L_OR : $uint<8>:= 6  
+$constant  L_SLL : $uint<8>:= 11  
+$constant  L_SRA : $uint<8>:= 13  
+$constant  L_SRL : $uint<8>:= 12  
+$constant  L_XNOR : $uint<8>:= 7  
+$constant  L_XOR : $uint<8>:= 8  
+$constant  SBIR : $uint<8>:= 2  
+$constant  STORE : $uint<8>:= 4  
+$constant  SUB : $uint<8>:= 10  
+$constant  byte_mask_3_bytes : $uint<32>:= 4294967040  
+$pipe  in_pipe : $uint<8>  $depth 32 
+// can point into 
+$pipe  mem_in : $uint<64>  $depth 8 
+// can point into 
+$pipe  mem_out : $uint<32>  $depth 8 
+// can point into 
+$constant  minus_1 : $uint<32>:= 4294967295  
+$constant  one_1 : $uint<1>:= 1  
+$constant  one_10 : $uint<10>:= 1  
+$constant  one_32 : $uint<32>:= 1  
+$constant  one_8 : $uint<8>:= 1  
+$pipe  out_pipe : $uint<8>  $depth 8 
+// can point into 
+$pipe  processor_result : $uint<32>  $depth 2 
+// can point into 
+$constant  read_signal : $uint<1>:= 1  
+$storage  reg_array : $array[64] $of $uint<32> // memory space index = 0  base address = 0  word size = 32
+// can point into 
+$pipe  request_to_bridge : $uint<64>  $depth 8 
+// can point into 
+$pipe  response_from_bridge : $uint<32>  $depth 8 
+// can point into 
+$constant  seven_8 : $uint<8>:= 7  
+$pipe  start_processor : $uint<8>  $depth 1  $signal 
+// can point into 
+$constant  uart_addr : $uint<8>:= 254  
+$constant  write_signal : $uint<1>:= 0  
+$constant  zero_1 : $uint<1>:= 0  
+$constant  zero_10 : $uint<10>:= 0  
+$constant  zero_23 : $uint<23>:= 0  
+$constant  zero_24 : $uint<24>:= 0  
+$constant  zero_32 : $uint<32>:= 0  
+$constant  zero_33 : $uint<33>:= 0  
+$module [cal_Next_program_cnt]
+$in ( opcode : $uint<8>   rd1 : $uint<32>   rd2 : $uint<32>   program_cnt : $uint<8>   is_rs1_neg : $uint<1>  )
+$out ( n_program_cnt : $uint<8>  )
+$is
+{
+  $volatile is_Branch := (((opcode == BZ) & ( ~ is_rs1_neg )) | ((opcode == BN) & is_rs1_neg))
+  $volatile normalFlow := ( ~ ((is_Branch | (opcode == CALL)) | (opcode == JMP)) )
+  $volatile addr1 := ( $slice rd1 7 0 ) 
+  $volatile addr2 := ( $slice rd2 7 0 ) 
+  $volatile n_program_cnt := ((( $mux (opcode == CALL) addr1  _b0  )  | ( $mux (opcode == JMP) addr1  _b0  ) ) | (( $mux (is_Branch == one_1) addr2  _b0  )  | ( $mux (normalFlow == one_1) (program_cnt + 1 )  _b0  ) ))
+}
+$module [global_storage_initializer_]
+$in ()
+$out ()
+$is
+{
+  $null
+}
+$module [memory_daemon]
+$in ()
+$out ()
+$is
+{
+  data_in_mem := mem_in// bits of buffering = 64. 
+  data_in := ( $slice data_in_mem 31 0 ) // bits of buffering = 32. 
+  mem_out := (data_in + 1 )// bits of buffering = 32. 
+}
+$pipeline $depth 7 $buffering 1 $module [registerFileModule]
+$in ( valid_1 : $uint<1>   addr_1 : $uint<8>   valid_2 : $uint<1>   addr_2 : $uint<8>   valid_w : $uint<1>   addr_w : $uint<8>   data_to_be_written : $uint<32>  )
+$out ( read_data_1 : $uint<32>   read_data_2 : $uint<32>  )
+$is
+{
+  $guard (valid_1) t_read_data_1 := reg_array[addr_1]// bits of buffering = 32. 
+  $guard (valid_2) t_read_data_2 := reg_array[addr_2]// bits of buffering = 32. 
+  valid_1_251_delayed_4_0 := valid_1 $buffering 4// bits of buffering = 4. 
+  read_data_1 := ( $mux valid_1_251_delayed_4_0 t_read_data_1  0  ) // bits of buffering = 32. 
+  valid_2_257_delayed_4_0 := valid_2 $buffering 4// bits of buffering = 4. 
+  read_data_2 := ( $mux valid_2_257_delayed_4_0 t_read_data_2  0  ) // bits of buffering = 32. 
+  $guard (valid_w) reg_array[addr_w] := data_to_be_written// bits of buffering = 32. 
+  $attribute delay 7
+}
+$module [receive_from_uart]
+$in ()
+$out ( receive_data_from_uart : $uint<32>  )
+$is
+{
+  in_data0 := in_pipe// bits of buffering = 8. 
+  in_data1 := in_pipe// bits of buffering = 8. 
+  in_data2 := in_pipe// bits of buffering = 8. 
+  in_data3 := in_pipe// bits of buffering = 8. 
+  receive_data_from_uart := ((in_data0 && in_data1) && (in_data2 && in_data3))// bits of buffering = 32. 
+}
+$module [send_to_uart]
+$in ( data_to_send : $uint<32>  )
+$out ()
+$is
+{
+  out_data_0 := ( $slice data_to_send 31 24 ) // bits of buffering = 8. 
+  out_data_1 := ( $slice data_to_send 23 16 ) // bits of buffering = 8. 
+  out_data_2 := ( $slice data_to_send 15 8 ) // bits of buffering = 8. 
+  out_data_3 := ( $slice data_to_send 7 0 ) // bits of buffering = 8. 
+  out_pipe := out_data_0// bits of buffering = 8. 
+  out_pipe := out_data_1// bits of buffering = 8. 
+  out_pipe := out_data_2// bits of buffering = 8. 
+  out_pipe := out_data_3// bits of buffering = 8. 
+}
+$module [processor]
+$in ()
+$out ()
+$is
+{
+  $branchblock [check_start]
+  {
+    $merge $entry check_for_start 
+    $endmerge
+    cmd := start_processor// bits of buffering = 8. 
+    $if (cmd == one_8) $then 
+    $branchblock [loop]
+    {
+      $dopipeline $depth 20 $buffering 2
+      $fullrate 
+      $merge $entry $loopback 
+      $phi program_cnt := 				  _b00000000  $on   $entry 				  n_program_cnt $on   $loopback 
+      // type of target is $uint<8>
+      $phi carry := 				  zero_32 $on   $entry 				  n_carry $on   $loopback 
+      // type of target is $uint<32>
+      $endmerge
+      mem_in := ((read_signal && program_cnt) && (zero_23 && zero_32))// bits of buffering = 64. 
+      instruction := mem_out// bits of buffering = 32. 
+      $volatile opcode := ( $slice instruction 31 24 ) 
+      $volatile rs1_imm := ( $slice instruction 23 16 ) 
+      $volatile rs2 := ( $slice instruction 15 8 ) 
+      $volatile rd := ( $slice instruction 7 0 ) 
+      $call registerFileModule (one_1 rs1_imm one_1 rs2 zero_1 rd zero_32 ) (rd1 rd2 ) 
+      n_carry := ( $mux (program_cnt == seven_8) one_32  zero_32 ) // bits of buffering = 32. 
+      $volatile is_rs1_neg := ( $slice rd1 31 31 ) 
+      opcode_400_delayed_7_0 := opcode $buffering 7// bits of buffering = 56. 
+      program_cnt_403_delayed_7_0 := program_cnt $buffering 7// bits of buffering = 56. 
+      $call cal_Next_program_cnt (opcode_400_delayed_7_0 rd1 rd2 program_cnt_403_delayed_7_0 is_rs1_neg ) (n_program_cnt ) 
+      $report (processor status 				 instruction instruction 				 rd1 rd1 				 rd2 rd2 				 n_program_cnt n_program_cnt )
+      EQ_u8_u1_418_418_delayed_7_0 := (opcode == ADD) $buffering 7// bits of buffering = 7. 
+      EQ_u8_u1_498_498_delayed_7_0 := (opcode == L_SRL) $buffering 7// bits of buffering = 7. 
+      MUX_431_431_delayed_7_0 := ( $mux (opcode == SBIR) (zero_24 && rs1_imm)  _b0  )  $buffering 7// bits of buffering = 224. 
+      EQ_u8_u1_435_435_delayed_7_0 := (opcode == L_AND) $buffering 7// bits of buffering = 7. 
+      EQ_u8_u1_444_444_delayed_7_0 := (opcode == L_OR) $buffering 7// bits of buffering = 7. 
+      EQ_u8_u1_452_452_delayed_7_0 := (opcode == L_XNOR) $buffering 7// bits of buffering = 7. 
+      EQ_u8_u1_461_461_delayed_7_0 := (opcode == L_XOR) $buffering 7// bits of buffering = 7. 
+      EQ_u8_u1_471_471_delayed_7_0 := (opcode == ADD) $buffering 7// bits of buffering = 7. 
+      EQ_u8_u1_479_479_delayed_7_0 := (opcode == SUB) $buffering 7// bits of buffering = 7. 
+      EQ_u8_u1_488_488_delayed_7_0 := (opcode == L_SLL) $buffering 7// bits of buffering = 7. 
+      EQ_u8_u1_507_507_delayed_7_0 := (opcode == L_SRA) $buffering 7// bits of buffering = 7. 
+      EQ_u8_u1_517_517_delayed_7_0 := (opcode == CMP) $buffering 7// bits of buffering = 7. 
+      exec_result_init := ((((( $mux EQ_u8_u1_418_418_delayed_7_0 (rd1 + rd2)  _b0  )  | MUX_431_431_delayed_7_0) | ( $mux EQ_u8_u1_435_435_delayed_7_0 (rd1 & rd2)  _b0  ) ) | ((( $mux EQ_u8_u1_444_444_delayed_7_0 (rd1 | rd2)  _b0  )  | ( $mux EQ_u8_u1_452_452_delayed_7_0 (rd1 ~^ rd2)  _b0  ) ) | ( $mux EQ_u8_u1_461_461_delayed_7_0 (rd1 ^ rd2)  _b0  ) )) | (((( $mux EQ_u8_u1_471_471_delayed_7_0 (rd1 + rd2)  _b0  )  | ( $mux EQ_u8_u1_479_479_delayed_7_0 (rd1 - rd2)  _b0  ) ) | ( $mux EQ_u8_u1_488_488_delayed_7_0 ($bitcast ($uint<32>) (rd1 << rd2) )  _b0  ) ) | ((( $mux EQ_u8_u1_498_498_delayed_7_0 ($bitcast ($uint<32>) (rd1 >> rd2) )  _b0  )  | ( $mux EQ_u8_u1_507_507_delayed_7_0 ($bitcast ($uint<32>) (rd1 >> rd2) )  _b0  ) ) | ( $mux EQ_u8_u1_517_517_delayed_7_0 ((( $mux (rd1 == rd2) zero_32  _b0  )  | ( $mux (rd1 < rd2) minus_1  _b0  ) ) | ( $mux (rd1 > rd2) one_32  _b0  ) )  _b0  ) )))// bits of buffering = 32. 
+      EQ_u8_u1_547_547_delayed_8_0 := (opcode == ADD) $buffering 8// bits of buffering = 8. 
+      carry_549_delayed_8_0 := carry $buffering 8// bits of buffering = 256. 
+      $volatile exec_result := ( $mux EQ_u8_u1_547_547_delayed_8_0 (exec_result_init + carry_549_delayed_8_0)  exec_result_init ) 
+      $volatile memWrite := ( $mux (opcode == STORE) zero_1  one_1 ) 
+      $volatile regWrite := (((((opcode == SBIR) | (opcode == LOAD)) | (opcode == L_AND)) | (((opcode == L_OR) | (opcode == L_XNOR)) | (opcode == ADD))) | ((((opcode == SUB) | (opcode == L_SLL)) | (opcode == L_SRL)) | (((opcode == L_SRA) | (opcode == CALL)) | (opcode == CMP))))
+      memAddr := ( $slice rd1 7 0 ) // bits of buffering = 8. 
+      $volatile is_uart_addr := ( $mux (memAddr == uart_addr) one_1  zero_1 ) 
+      memWrite_625_delayed_8_0 := memWrite $buffering 8// bits of buffering = 8. 
+      rd2_629_delayed_1_0 := rd2// bits of buffering = 32. 
+      $guard (~is_uart_addr) mem_in := ((memWrite_625_delayed_8_0 && memAddr) && (zero_23 && rd2_629_delayed_1_0))// bits of buffering = 64. 
+      $guard (~is_uart_addr) memReadData := mem_out// bits of buffering = 32. 
+      $guard (is_uart_addr) $call receive_from_uart () (data_from_uart ) 
+      $report (processor uart 				 data_from_uart data_from_uart )
+      $volatile program_cnt_1 := (program_cnt + 1 )
+      EQ_u8_u1_653_653_delayed_9_0 := (opcode == LOAD) $buffering 9// bits of buffering = 9. 
+      EQ_u8_u1_657_657_delayed_8_0 := (opcode == CALL) $buffering 8// bits of buffering = 8. 
+      type_cast_659_659_delayed_8_0 := ($bitcast ($uint<32>) program_cnt_1 ) $buffering 8// bits of buffering = 256. 
+      EQ_u1_u1_662_662_delayed_8_0 := (regWrite == one_1) $buffering 8// bits of buffering = 8. 
+      MUX_667_667_delayed_1_0 := ( $mux EQ_u8_u1_657_657_delayed_8_0 type_cast_659_659_delayed_8_0  ( $mux EQ_u1_u1_662_662_delayed_8_0 exec_result  ($bitcast ($uint<32>) 0  ) )  ) // bits of buffering = 32. 
+      regWriteData := ( $mux EQ_u8_u1_653_653_delayed_9_0 memReadData  MUX_667_667_delayed_1_0 ) // bits of buffering = 32. 
+      rs1_imm_671_delayed_10_0 := rs1_imm $buffering 10// bits of buffering = 80. 
+      rs2_673_delayed_10_0 := rs2 $buffering 10// bits of buffering = 80. 
+      regWrite_674_delayed_10_0 := regWrite $buffering 10// bits of buffering = 10. 
+      rd_675_delayed_10_0 := rd $buffering 10// bits of buffering = 80. 
+      $call registerFileModule (zero_1 rs1_imm_671_delayed_10_0 zero_1 rs2_673_delayed_10_0 regWrite_674_delayed_10_0 rd_675_delayed_10_0 regWriteData ) (read_while_write1 read_while_write2 ) 
+      EQ_u8_u1_683_683_delayed_10_0 := (opcode == STORE) $buffering 10// bits of buffering = 10. 
+      rd2_684_delayed_3_0 := rd2 $buffering 3// bits of buffering = 96. 
+      data_to_send_uart := ( $mux EQ_u8_u1_683_683_delayed_10_0 rd2_684_delayed_3_0  regWriteData ) // bits of buffering = 32. 
+      $call send_to_uart (data_to_send_uart ) () 
+      $while ( ~ (opcode == HALT) )
+    }
+    $place[check_for_start]
+    $endif
+  }
+}
+// Memory space 0: reg_array 

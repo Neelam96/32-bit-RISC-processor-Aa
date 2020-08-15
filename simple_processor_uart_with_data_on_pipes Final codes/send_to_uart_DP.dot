@@ -1,0 +1,26 @@
+digraph data_path {
+  out_data_0_283 [shape=ellipse];
+  out_data_1_287 [shape=ellipse];
+  out_data_2_291 [shape=ellipse];
+  out_data_3_295 [shape=ellipse];
+  WPIPE_out_pipe_296_inst [shape=rectangle];
+out_data_0_283  -> WPIPE_out_pipe_296_inst;
+  WPIPE_out_pipe_299_inst [shape=rectangle];
+out_data_1_287  -> WPIPE_out_pipe_299_inst;
+  WPIPE_out_pipe_302_inst [shape=rectangle];
+out_data_2_291  -> WPIPE_out_pipe_302_inst;
+  WPIPE_out_pipe_305_inst [shape=rectangle];
+out_data_3_295  -> WPIPE_out_pipe_305_inst;
+  slice_282_inst [shape=rectangle];
+data_to_send  -> slice_282_inst;
+slice_282_inst -> out_data_0_283;
+  slice_286_inst [shape=rectangle];
+data_to_send  -> slice_286_inst;
+slice_286_inst -> out_data_1_287;
+  slice_290_inst [shape=rectangle];
+data_to_send  -> slice_290_inst;
+slice_290_inst -> out_data_2_291;
+  slice_294_inst [shape=rectangle];
+data_to_send  -> slice_294_inst;
+slice_294_inst -> out_data_3_295;
+}

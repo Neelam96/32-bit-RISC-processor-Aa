@@ -1,0 +1,7 @@
+v 3
+file "/home/neelam/Downloads/EE 789 Assignment 2/simple_processor_uart_with_data_on_pipes/" "./src/memory_lib.vhdl" "20191130162736.000" "20191130215754.068":
+  entity dual_port_u32_ram_with_init at 1( 0) + 0 on 11;
+  architecture xilinxbraminfer of dual_port_u32_ram_with_init at 23( 751) + 0 on 12;
+  package memory_libcomponents at 181( 5111) + 0 on 13;
+  entity memory_daemon at 213( 6220) + 0 on 14;
+  architecture memory_daemon_arch of memory_daemon at 245( 7382) + 0 on 15;
