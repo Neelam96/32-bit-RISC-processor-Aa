@@ -1,0 +1,92 @@
+-----------------
+Data-types
+-----------------
+
+      uint32_t
+        all addresses
+
+	all operands stored
+	in 2's complement form.
+
+
+      byte order is big-endian.
+
+-----------------
+Registers
+-----------------
+
+There are 64 general purpose
+registers.
+
+-----------------
+Instructions
+-----------------
+
+HALT
+SBIR  imm rd 			#code instruction to be SBIR imm rd rd
+      load byte imm into lowest
+      byte of rd.
+LOAD  rs1 rd  --can i treat it like LOAD rs1 rs2 rd
+      <rd> <- mem[<rs1>]
+STORE rs1 rs2
+      mem[<rs1>] = <rs2>
+AND   rs1 rs2 rd
+      <rd> = <rs1>.<rs2>
+OR    rs1 rs2 rd
+      etc.
+NOT   rs1 rs2 rd
+XOR   rs1 rs2 rd
+ADD   rs1 rs2 rd
+SUB   rs1 rs2 rd
+SLL   rs1 rs2 rd
+      <rd> = <rs1> << <rs2>
+SRL   rs1 rs2 rd
+      <rd> = <rs1> >> <rs2>
+SRA   rs1 rs2 rd
+      <rd> = <rs1> >> <rs2>
+         sign extend. 
+BZ    rs1 rs2
+        if <rs1>==0 jump to <rs2>
+BN    rs1 rs2
+        if <rs1> is negative, jump to <rs2>
+CALL  rs1  rd 		#Treating it like CALL rs1 rs2 rd
+	jump to <rs1>, store pc in rd.
+JMP   rs1
+	jump to <rs1>
+CMP   rs1 rs2 rd
+        <rd> = ($excmux 
+                    (<rs1> == <rs2>) 0
+                    (<rs1> < <rs2>)  -1   -- can  i take it as 2?
+                    (<rs1> > <rs2>)  1)
+	
+
+
+-------------------
+Instruction format
+-------------------
+
+op-code   rs1/imm  rs2  rd
+8         8         8    8
+
+
+-------------------
+opcodes
+-------------------
+HALT  0x1
+SBIR  0x2
+LOAD  0x3
+STORE 0x4
+AND   0x5
+OR    0x6
+NOT   0x7
+XOR   0x8
+ADD   0x9
+SUB   0xa
+SLL   0xb
+SRL   0xc
+SRA   0xd
+BZ    0xe
+BN    0xf
+CALL  0x10
+JMP   0x11
+

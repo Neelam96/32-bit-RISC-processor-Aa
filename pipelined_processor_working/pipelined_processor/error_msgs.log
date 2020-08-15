@@ -1,0 +1,1999 @@
+AaLinkExtMem ./src/prog.aa | vcFormat > prog.linked.aa
+Info: Added module accessMem
+Info: Added module accessReg
+Info: Added module memAccessDaemon
+Info: Added module regAccessDaemon
+Info: Added module processor_daemon
+Info: Added module scoreBoard
+Info: Added module iExecStage
+Info: finished parsing file ./src/prog.aa
+Info: Added module global_storage_initializer_
+Info: elaborating the program .... initializing the call-graph
+Info: mapping target object references..
+Info: mapping source object references..
+Info: checking for cycles in the call-graph ... 
+Info: module order:
+	accessMem
+	accessReg
+	global_storage_initializer_
+	iExecStage
+	memAccessDaemon
+	scoreBoard
+	processor_daemon
+	regAccessDaemon
+Info: marking modules reachable from root-modules ... 
+Info: module accessMem is reachable from a specified root module.
+Info: module accessReg is reachable from a specified root module.
+Info: module global_storage_initializer_ is reachable from a specified root module.
+Info: module iExecStage is reachable from a specified root module.
+Info: module memAccessDaemon is reachable from a specified root module.
+Info: module processor_daemon is reachable from a specified root module.
+Info: module scoreBoard is reachable from a specified root module.
+Info: module regAccessDaemon is reachable from a specified root module.
+Info: propagating types in the program ... 
+Info: coalescing storage into distinct memory spaces ... 
+Info: Marking foreign pointers in modules which are not called from the program
+Info: Coalescing storage from native objects..
+Info: Finished coalescing storage.. identified 2 disjoint memory space(s)
+Info: Memory space 0: reg_array 
+Info: Memory space 1: mem_array 
+Info: propagating constants in the program ... 
+AaOpt -B prog.linked.aa | vcFormat > prog.linked.opt.aa
+Info: Added module accessMem
+Info: Added module accessReg
+Info: Added module global_storage_initializer_
+Info: Added module iExecStage
+Info: Added module memAccessDaemon
+Info: Added module scoreBoard
+Info: Added module processor_daemon
+Info: Added module regAccessDaemon
+Info: elaborating the program .... initializing the call-graph
+Info: mapping target object references..
+Info: mapping source object references..
+Info: checking for cycles in the call-graph ... 
+Info: module order:
+	accessMem
+	accessReg
+	global_storage_initializer_
+	iExecStage
+	memAccessDaemon
+	scoreBoard
+	processor_daemon
+	regAccessDaemon
+Info: marking modules reachable from root-modules ... 
+Info: module accessMem is reachable from a specified root module.
+Info: module accessReg is reachable from a specified root module.
+Info: module global_storage_initializer_ is reachable from a specified root module.
+Info: module iExecStage is reachable from a specified root module.
+Info: module memAccessDaemon is reachable from a specified root module.
+Info: module processor_daemon is reachable from a specified root module.
+Info: module scoreBoard is reachable from a specified root module.
+Info: module regAccessDaemon is reachable from a specified root module.
+Info: propagating types in the program ... 
+Info: coalescing storage into distinct memory spaces ... 
+Info: Marking foreign pointers in modules which are not called from the program
+Info: Coalescing storage from native objects..
+Info: Finished coalescing storage.. identified 2 disjoint memory space(s)
+Info: Memory space 0: mem_array 
+Info: Memory space 1: reg_array 
+Info: propagating constants in the program ... 
+Info:  started path balancing for module accessMem
+Info: Longest path in accessMem is 5
+Info: added 4 buffering bits during path balancing
+Info:  started path balancing for module accessReg
+Info: Longest path in accessReg is 5
+Info: added 4 buffering bits during path balancing
+Info: added 4 buffering bits during path balancing
+Info:  started path balancing for module iExecStage
+Info: Longest path in iExecStage is 2
+Info: added 32 buffering bits during path balancing
+Info: added 32 buffering bits during path balancing
+Info: added 32 buffering bits during path balancing
+Info: added 32 buffering bits during path balancing
+Info: added 32 buffering bits during path balancing
+Info: added 32 buffering bits during path balancing
+Info: added 32 buffering bits during path balancing
+Info: added 32 buffering bits during path balancing
+Info: added 32 buffering bits during path balancing
+Info: added 32 buffering bits during path balancing
+Info: added 32 buffering bits during path balancing
+Info: added 32 buffering bits during path balancing
+Info: added 32 buffering bits during path balancing
+Info: added 32 buffering bits during path balancing
+Info: added 1 buffering bits during path balancing
+Info: added 1 buffering bits during path balancing
+Info: added 32 buffering bits during path balancing
+Info: added 32 buffering bits during path balancing
+Info: ignored orphan statement: 	rd1 := ( $slice iexec_state 73 42 ) // bits of buffering = 32.  Orphaned statement with target rd1 ?? 
+
+Info: ignored orphan statement: 	rd2 := ( $slice iexec_state 41 10 ) // bits of buffering = 32.  Orphaned statement with target rd2 ?? 
+
+Info: ignored orphan statement: 	$volatile unused_bits := ( $slice iexec_rd1_final 30 0 ) 
+
+Info:  started equalizing paths for do-while statement do_while_stmt_430 in module memAccessDaemon
+Info: Longest path in do_while_stmt_430 is 8
+Info: ignored orphan statement: 			$volatile unused := ( $slice cmd_1 21 1 ) 
+
+Info: ignored orphan statement: 	$volatile dcache_state_first := ( $slice dcache_state 138 11 ) 
+
+Info: ignored orphan statement: 	$volatile dcache_state_second := ( $slice dcache_state 9 0 ) 
+
+Info: ignored orphan statement: 	$volatile ex_rd1 := ( $slice iexec_state 73 42 ) 
+
+Info: ignored orphan statement: 	$volatile ex_rd2 := ( $slice iexec_state 41 10 ) 
+
+Info: ignored orphan statement: 	$volatile ex_pc := ( $slice iexec_state 9 0 ) 
+
+Info: ignored orphan statement: 	$volatile dcache_rd1 := ( $slice dcache_state 106 75 ) 
+
+Info: ignored orphan statement: 	$volatile dcache_rd2 := ( $slice dcache_state 74 43 ) 
+
+Info: ignored orphan statement: 	$volatile dcache_second := ( $slice dcache_state 42 0 ) 
+
+Info: ignored orphan statement: 	$volatile iretire_rs2 := ( $slice iretire_state 122 115 ) 
+
+Info: ignored orphan statement: 	$volatile iretire_state_second := ( $slice iretire_state 106 0 ) 
+
+Info: ignored orphan statement: 	$volatile iregfile_rd := ( $slice iregfile_state 17 10 ) 
+
+Info: ignored orphan statement: 	$volatile iregfile_pc := ( $slice iregfile_state 9 0 ) 
+
+Info: ignored orphan statement: 	$volatile iregfile_state_rs1_imm := ( $slice iregfile_state 33 26 ) 
+
+Info: ignored orphan statement: 	$volatile iregfile_state_rs2 := ( $slice iregfile_state 25 18 ) 
+
+Info: ignored orphan statement: 	$volatile iregfile_state_rd := ( $slice iregfile_state 17 10 ) 
+
+Info: ignored orphan statement: 	$volatile iregfile_state_pc := ( $slice iregfile_state 9 0 ) 
+
+Info: ignored orphan statement: 	$volatile ret_opcode := ( $slice iretire_state 138 131 ) 
+
+Info: ignored orphan statement: 	$volatile ret_rs1_imm := ( $slice iretire_state 130 123 ) 
+
+Info: ignored orphan statement: 	$volatile ret_rs2 := ( $slice iretire_state 122 115 ) 
+
+Info: ignored orphan statement: 	$volatile ret_rd := ( $slice iretire_state 114 107 ) 
+
+Info: ignored orphan statement: 	$volatile ret_rd1 := ( $slice iretire_state 106 75 ) 
+
+Info: ignored orphan statement: 	$volatile ret_rd2 := ( $slice iretire_state 74 43 ) 
+
+Info: ignored orphan statement: 	$volatile ret_exec_result_memData := ( $slice iretire_state 42 11 ) 
+
+Info: ignored orphan statement: 	$volatile ret_isBrach := ( $slice iretire_state 10 10 ) 
+
+Info: ignored orphan statement: 	$volatile ret_pc := ( $slice iretire_state 9 0 ) 
+
+Info:  started equalizing paths for do-while statement do_while_stmt_989 in module processor_daemon
+Info: Longest path in do_while_stmt_989 is 8
+Info: added 7 buffering bits during path balancing
+Info: added 7 buffering bits during path balancing
+Info: added 294 buffering bits during path balancing
+Info: added 70 buffering bits during path balancing
+Info: added 4 buffering bits during path balancing
+Info: added 7 buffering bits during path balancing
+Info: added 224 buffering bits during path balancing
+Info: added 7 buffering bits during path balancing
+Info: added 224 buffering bits during path balancing
+Info: added 7 buffering bits during path balancing
+Info: added 224 buffering bits during path balancing
+Info: added 70 buffering bits during path balancing
+Info: added 7 buffering bits during path balancing
+Info: added 224 buffering bits during path balancing
+Info: added 448 buffering bits during path balancing
+Info: added 224 buffering bits during path balancing
+Info: added 77 buffering bits during path balancing
+Info: ignored orphan statement: 				$volatile iregfile_instruction := ( $slice iregfile_state 41 10 ) 
+
+Info: ignored orphan statement: 				$volatile iexec_opcode := ( $slice iexec_state 105 98 ) 
+
+Info: ignored orphan statement: 				$volatile iexec_rs2 := ( $slice iexec_state 89 82 ) 
+
+Info: ignored orphan statement: 				$volatile iexec_rd := ( $slice iexec_state 81 74 ) 
+
+Info: ignored orphan statement: 				$volatile iexec_pc := ( $slice iexec_state 9 0 ) 
+
+Info: ignored orphan statement: 				$volatile iretire_rs1_imm := ( $slice iretire_state 130 123 ) 
+
+Info: ignored orphan statement: 				$volatile iretire_rs2 := ( $slice iretire_state 122 115 ) 
+
+Info: ignored orphan statement: 				$volatile iretire_data := ( $slice iretire_state 106 43 ) 
+
+Info: ignored orphan statement: 				$volatile iretire_branch := ( $slice iretire_state 10 10 ) 
+
+Info: ignored orphan statement: 				$volatile iretire_pc := ( $slice iretire_state 9 0 ) 
+
+Info: ignored orphan statement: 				$volatile unused := ( $slice final_memAddr_32 31 10 ) 
+
+Info: ignored orphan statement: 				$volatile reg_pc := ( $slice iregfile_state 9 0 ) 
+
+Info: ignored orphan statement: 				$volatile next_ifetch_state_22 := ( $slice next_ifetch_state_32 31 10 ) 
+
+Info:  started equalizing paths for do-while statement do_while_stmt_1445 in module regAccessDaemon
+Info: Longest path in do_while_stmt_1445 is 8
+Info: ignored orphan statement: 			$volatile unused := ( $slice cmd_1 45 41 ) 
+
+Info: added 2651 bits of buffering during path balancing.
+Aa2VC -O -C prog.linked.opt.aa | vcFormat > prog.vc
+Info: -O option selected, will parallelize straight-line sequences
+Info: -C option selected, will generate C-stubs for mixed C-VHDL simulation
+Info: Added module accessMem
+Info: Added module accessReg
+Info: Added module global_storage_initializer_
+Info: Added module iExecStage
+Info: Added module memAccessDaemon
+Info: Added module scoreBoard
+Info: Added module processor_daemon
+Info: Added module regAccessDaemon
+Info: elaborating the program .... initializing the call-graph
+Info: mapping target object references..
+Info: mapping source object references..
+Info: checking for cycles in the call-graph ... 
+Info: module order:
+	accessMem
+	accessReg
+	global_storage_initializer_
+	iExecStage
+	memAccessDaemon
+	scoreBoard
+	processor_daemon
+	regAccessDaemon
+Info: marking modules reachable from root-modules ... 
+Info: module accessMem is reachable from a specified root module.
+Info: module accessReg is reachable from a specified root module.
+Info: module global_storage_initializer_ is reachable from a specified root module.
+Info: module iExecStage is reachable from a specified root module.
+Info: module memAccessDaemon is reachable from a specified root module.
+Info: module processor_daemon is reachable from a specified root module.
+Info: module scoreBoard is reachable from a specified root module.
+Info: module regAccessDaemon is reachable from a specified root module.
+Info: propagating types in the program ... 
+Info: coalescing storage into distinct memory spaces ... 
+Info: Marking foreign pointers in modules which are not called from the program
+Info: Coalescing storage from native objects..
+Info: Finished coalescing storage.. identified 2 disjoint memory space(s)
+Info: Memory space 0: mem_array 
+Info: Memory space 1: reg_array 
+Info: propagating constants in the program ... 
+Info: Writing optimized VC model.. 
+Info: Done writing optimized VC model.. 
+vc2vhdl  -O -D -S 4 -I 2 -v -a -C -e ahir_system -w -s ghdl -T memAccessDaemon -T regAccessDaemon -T processor_daemon  -f prog.vc 
+Info: -O option selected, will try to compress control-path..
+Info: -D option selected: VHDL will have debug assertions..
+Info: -S option selected: bypass stride will be set to 4.
+Info: -I option is deprecated.. has no effect.
+Info: -v option selected: lots of info will be printed (to stderr, and also dot-files of control-paths if -O option is selected).
+Info: -a option selected: will try for minimum overall circuit area.
+Info: -C option selected: will generate testbench which connects to foreign link.
+Info: -e ahir_system top-level VHDL entity will have name ahir_system.unformatted_vhdl
+Info: -w ahir_system will write separate system and testbench VHDL files.
+Info: -s ghdl option selected: will generate testbench with VHPI link.
+Info: module memAccessDaemon set as one of the ever-running top modules. 
+   NOTE: memAccessDaemon cannot have any input/output arguments.
+Info: module regAccessDaemon set as one of the ever-running top modules. 
+   NOTE: regAccessDaemon cannot have any input/output arguments.
+Info: module processor_daemon set as one of the ever-running top modules. 
+   NOTE: processor_daemon cannot have any input/output arguments.
+Warning: control-path links to flow-through DPE array_obj_ref_136_index_0_resize ignored,  in module accessMem
+Warning: control-path links to flow-through DPE array_obj_ref_136_index_0_rename ignored,  in module accessMem
+Warning: control-path links to flow-through DPE array_obj_ref_136_index_offset ignored,  in module accessMem
+Warning: control-path links to flow-through DPE array_obj_ref_136_root_address_inst ignored,  in module accessMem
+Warning: control-path links to flow-through DPE array_obj_ref_136_addr_0 ignored,  in module accessMem
+Warning: control-path links to flow-through DPE array_obj_ref_136_gather_scatter ignored,  in module accessMem
+Warning: control-path links to flow-through DPE array_obj_ref_140_index_0_resize ignored,  in module accessMem
+Warning: control-path links to flow-through DPE array_obj_ref_140_index_0_rename ignored,  in module accessMem
+Warning: control-path links to flow-through DPE array_obj_ref_140_index_offset ignored,  in module accessMem
+Warning: control-path links to flow-through DPE array_obj_ref_140_root_address_inst ignored,  in module accessMem
+Warning: control-path links to flow-through DPE array_obj_ref_140_addr_0 ignored,  in module accessMem
+Warning: control-path links to flow-through DPE array_obj_ref_140_gather_scatter ignored,  in module accessMem
+Warning: in equivalence operator array_obj_ref_166_index_0_resize, total input width is not equal to total output width.. output will truncate the input..
+Warning: in equivalence operator array_obj_ref_171_index_0_resize, total input width is not equal to total output width.. output will truncate the input..
+Warning: in equivalence operator array_obj_ref_193_index_0_resize, total input width is not equal to total output width.. output will truncate the input..
+Warning: control-path links to flow-through DPE array_obj_ref_166_index_0_resize ignored,  in module accessReg
+Warning: control-path links to flow-through DPE array_obj_ref_166_index_0_rename ignored,  in module accessReg
+Warning: control-path links to flow-through DPE array_obj_ref_166_index_offset ignored,  in module accessReg
+Warning: control-path links to flow-through DPE array_obj_ref_166_root_address_inst ignored,  in module accessReg
+Warning: control-path links to flow-through DPE array_obj_ref_166_addr_0 ignored,  in module accessReg
+Warning: control-path links to flow-through DPE array_obj_ref_166_gather_scatter ignored,  in module accessReg
+Warning: control-path links to flow-through DPE array_obj_ref_171_index_0_resize ignored,  in module accessReg
+Warning: control-path links to flow-through DPE array_obj_ref_171_index_0_rename ignored,  in module accessReg
+Warning: control-path links to flow-through DPE array_obj_ref_171_index_offset ignored,  in module accessReg
+Warning: control-path links to flow-through DPE array_obj_ref_171_root_address_inst ignored,  in module accessReg
+Warning: control-path links to flow-through DPE array_obj_ref_171_addr_0 ignored,  in module accessReg
+Warning: control-path links to flow-through DPE array_obj_ref_171_gather_scatter ignored,  in module accessReg
+Warning: control-path links to flow-through DPE array_obj_ref_193_index_0_resize ignored,  in module accessReg
+Warning: control-path links to flow-through DPE array_obj_ref_193_index_0_rename ignored,  in module accessReg
+Warning: control-path links to flow-through DPE array_obj_ref_193_index_offset ignored,  in module accessReg
+Warning: control-path links to flow-through DPE array_obj_ref_193_root_address_inst ignored,  in module accessReg
+Warning: control-path links to flow-through DPE array_obj_ref_193_addr_0 ignored,  in module accessReg
+Warning: control-path links to flow-through DPE array_obj_ref_193_gather_scatter ignored,  in module accessReg
+Warning: module global_storage_initializer_ is not reachable from a top-level module, ignored
+Info: Info: transition [array_obj_ref_136_base_address_calculated] is isolated, removed.
+Info: reducing Control-path 
+Info: finding nucleii 
+Info:  Total number of strongly-connected-components is 17
+Info: SCC 0
+	e_0
+Info: SCC 1
+	e_2
+Info: SCC 2
+	e_16
+	e_14
+Info: SCC 3
+	e_23
+Info: SCC 4
+	e_3
+Info: SCC 5
+	e_4
+Info: SCC 6
+	e_12
+	e_8
+	e_6
+	e_10
+	e_22
+Info: SCC 7
+	e_1
+Info: SCC 8
+	e_21
+	e_19
+Info: SCC 9
+	e_5
+Info: SCC 10
+	e_15
+	e_17
+	e_7
+	e_18
+	e_20
+	e_9
+Info: SCC 11
+	e_11
+	e_13
+Info: SCC 12
+	e_24
+Info: SCC 13
+	e_25
+Info: SCC 14
+	e_26
+Info: SCC 15
+	e_27
+Info: SCC 16
+	e_28
+Info: Info: transition [array_obj_ref_166_base_address_calculated] is isolated, removed.
+Info: Info: transition [array_obj_ref_171_base_address_calculated] is isolated, removed.
+Info: reducing Control-path 
+Info: finding nucleii 
+Info:  Total number of strongly-connected-components is 30
+Info: SCC 0
+	e_0
+Info: SCC 1
+	e_41
+Info: SCC 2
+	e_2
+Info: SCC 3
+	e_3
+Info: SCC 4
+	e_8
+Info: SCC 5
+	e_7
+Info: SCC 6
+	e_6
+Info: SCC 7
+	e_5
+Info: SCC 8
+	e_4
+Info: SCC 9
+	e_15
+	e_17
+	e_35
+	e_37
+	e_11
+	e_13
+	e_39
+	e_40
+Info: SCC 10
+	e_19
+	e_21
+Info: SCC 11
+	e_27
+	e_29
+Info: SCC 12
+	e_1
+Info: SCC 13
+	e_24
+	e_26
+Info: SCC 14
+	e_9
+Info: SCC 15
+	e_32
+	e_34
+Info: SCC 16
+	e_10
+Info: SCC 17
+	e_14
+	e_20
+	e_22
+	e_23
+	e_25
+	e_12
+Info: SCC 18
+	e_16
+	e_18
+	e_28
+	e_30
+	e_31
+	e_33
+Info: SCC 19
+	e_36
+	e_38
+Info: SCC 20
+	e_42
+Info: SCC 21
+	e_43
+Info: SCC 22
+	e_44
+Info: SCC 23
+	e_45
+Info: SCC 24
+	e_46
+Info: SCC 25
+	e_47
+Info: SCC 26
+	e_48
+Info: SCC 27
+	e_49
+Info: SCC 28
+	e_50
+Info: SCC 29
+	e_51
+Info: reducing Control-path 
+Info: finding nucleii 
+Info:  Total number of strongly-connected-components is 36
+Info: SCC 0
+	e_0
+Info: SCC 1
+	e_2
+Info: SCC 2
+	e_6
+	e_8
+Info: SCC 3
+	e_10
+	e_12
+Info: SCC 4
+	e_14
+	e_16
+Info: SCC 5
+	e_18
+	e_20
+Info: SCC 6
+	e_22
+	e_24
+Info: SCC 7
+	e_3
+Info: SCC 8
+	e_4
+Info: SCC 9
+	e_26
+	e_28
+Info: SCC 10
+	e_30
+	e_32
+Info: SCC 11
+	e_34
+	e_36
+Info: SCC 12
+	e_38
+	e_40
+Info: SCC 13
+	e_42
+	e_44
+Info: SCC 14
+	e_46
+	e_48
+Info: SCC 15
+	e_50
+	e_52
+Info: SCC 16
+	e_54
+	e_56
+Info: SCC 17
+	e_58
+	e_60
+Info: SCC 18
+	e_62
+	e_64
+Info: SCC 19
+	e_66
+	e_68
+Info: SCC 20
+	e_70
+	e_72
+Info: SCC 21
+	e_74
+	e_76
+Info: SCC 22
+	e_78
+	e_80
+Info: SCC 23
+	e_82
+	e_84
+Info: SCC 24
+	e_86
+	e_88
+Info: SCC 25
+	e_90
+	e_92
+Info: SCC 26
+	e_94
+	e_96
+Info: SCC 27
+	e_1
+Info: SCC 28
+	e_99
+	e_101
+Info: SCC 29
+	e_5
+Info: SCC 30
+	e_7
+	e_9
+	e_11
+	e_13
+	e_15
+	e_17
+	e_19
+	e_21
+	e_23
+	e_25
+	e_27
+	e_29
+	e_31
+	e_33
+	e_35
+	e_37
+	e_39
+	e_41
+	e_43
+	e_45
+	e_47
+	e_49
+	e_51
+	e_53
+	e_55
+	e_57
+	e_59
+	e_61
+	e_63
+	e_65
+	e_67
+	e_69
+	e_71
+	e_73
+	e_75
+	e_77
+	e_79
+	e_81
+	e_83
+	e_85
+	e_87
+	e_89
+	e_91
+	e_93
+	e_95
+	e_97
+	e_98
+	e_100
+Info: SCC 31
+	e_102
+Info: SCC 32
+	e_103
+Info: SCC 33
+	e_104
+Info: SCC 34
+	e_105
+Info: SCC 35
+	e_106
+Warning: all elements not reachable from entry in region branch_block_stmt_479/do_while_stmt_480/do_while_stmt_480_loop_body
+	 un-visited elements
+	back_edge_to_loop_body
+	first_time_through_loop_body
+	loop_body_start
+	condition_evaluated
+	call_stmt_501_update_start_
+	call_stmt_501_update_completed_
+	call_stmt_501_Update
+	WPIPE_accessMem_response_502_sample_start_
+	WPIPE_accessMem_response_502_sample_completed_
+	WPIPE_accessMem_response_502_update_start_
+	WPIPE_accessMem_response_502_update_completed_
+	WPIPE_accessMem_response_502_Sample
+	WPIPE_accessMem_response_502_Update
+	loop_body_delay_to_condition_start
+	$exit
+Warning: exit not reachable from every element in region branch_block_stmt_479/do_while_stmt_480/do_while_stmt_480_loop_body
+	 un-visited elements
+	back_edge_to_loop_body
+	first_time_through_loop_body
+	loop_body_start
+	condition_evaluated
+	RPIPE_accessMem_request_483_sample_start_
+	RPIPE_accessMem_request_483_sample_completed_
+	RPIPE_accessMem_request_483_update_start_
+	RPIPE_accessMem_request_483_update_completed_
+	RPIPE_accessMem_request_483_Sample
+	RPIPE_accessMem_request_483_Update
+	call_stmt_501_sample_start_
+	call_stmt_501_sample_completed_
+	call_stmt_501_Sample
+	loop_body_delay_to_condition_start
+	$entry
+Info: removed redundant marked link: [call_stmt_501_update_start_] o<-& [call_stmt_501_update_completed_]
+Info: reducing Control-path 
+Info: finding nucleii 
+Info:  Total number of strongly-connected-components is 16
+Info: SCC 0
+	e_0
+Info: SCC 1
+	e_1
+Info: SCC 2
+	e_2
+Info: SCC 3
+	e_24
+Info: SCC 4
+	e_3
+Info: SCC 5
+	e_4
+Info: SCC 6
+	e_22
+Info: SCC 7
+	e_23
+Info: SCC 8
+	e_5
+Info: SCC 9
+	e_6
+Info: SCC 10
+	e_7
+Info: SCC 11
+	e_8
+Info: SCC 12
+	e_10
+	e_11
+	e_12
+	e_13
+	e_14
+	e_16
+Info: SCC 13
+	e_21
+Info: SCC 14
+	e_9
+Info: SCC 15
+	e_15
+	e_17
+	e_18
+	e_19
+	e_20
+Info: Info: transition [phi_stmt_933_merged_reqs] is isolated, removed.
+Info: Info: transition [phi_stmt_937_merged_reqs] is isolated, removed.
+Info: Info: transition [phi_stmt_941_merged_reqs] is isolated, removed.
+Info: Info: transition [phi_stmt_945_merged_reqs] is isolated, removed.
+Info: Info: transition [phi_stmt_949_merged_reqs] is isolated, removed.
+Info: Info: transition [phi_stmt_953_merged_reqs] is isolated, removed.
+Info: Info: transition [phi_stmt_957_merged_reqs] is isolated, removed.
+Warning: all elements not reachable from entry in region branch_block_stmt_921/branch_block_stmt_930/do_while_stmt_931/do_while_stmt_931_loop_body
+	 un-visited elements
+	back_edge_to_loop_body
+	first_time_through_loop_body
+	loop_body_start
+	phi_stmt_933_loopback_trigger
+	phi_stmt_933_entry_trigger
+	phi_stmt_933_phi_mux_ack
+	phi_stmt_937_loopback_trigger
+	phi_stmt_937_entry_trigger
+	phi_stmt_937_phi_mux_ack
+	phi_stmt_941_loopback_trigger
+	phi_stmt_941_entry_trigger
+	phi_stmt_941_phi_mux_ack
+	phi_stmt_945_loopback_trigger
+	phi_stmt_945_entry_trigger
+	phi_stmt_945_phi_mux_ack
+	phi_stmt_949_loopback_trigger
+	phi_stmt_949_entry_trigger
+	phi_stmt_949_phi_mux_ack
+	phi_stmt_953_loopback_trigger
+	phi_stmt_953_entry_trigger
+	phi_stmt_953_phi_mux_ack
+	phi_stmt_957_loopback_trigger
+	phi_stmt_957_entry_trigger
+	phi_stmt_957_phi_mux_ack
+	call_stmt_1133_update_start_
+	call_stmt_1133_update_completed_
+	call_stmt_1133_Update
+	assign_stmt_1136_update_start_
+	assign_stmt_1136_update_completed_
+	assign_stmt_1136_Update
+	MUX_1141_sample_start_
+	MUX_1141_sample_completed_
+	MUX_1141_start
+	loop_body_delay_to_condition_start
+Warning: exit not reachable from every element in region branch_block_stmt_921/branch_block_stmt_930/do_while_stmt_931/do_while_stmt_931_loop_body
+	 un-visited elements
+	condition_evaluated
+	aggregated_phi_update_ack
+	phi_stmt_933_update_completed_
+	phi_stmt_933_update_start__ps
+	phi_stmt_933_update_completed__ps
+	phi_stmt_933_loopback_sample_req
+	phi_stmt_933_loopback_sample_req_ps
+	phi_stmt_933_entry_sample_req
+	phi_stmt_933_entry_sample_req_ps
+	phi_stmt_933_phi_mux_ack
+	phi_stmt_933_phi_mux_ack_ps
+	R_one_10_935_update_start__ps
+	R_one_10_935_update_completed__ps
+	R_one_10_935_update_start_
+	R_one_10_935_update_completed_
+	R_next_ifetch_state_936_update_start__ps
+	R_next_ifetch_state_936_update_completed__ps
+	R_next_ifetch_state_936_update_start_
+	R_next_ifetch_state_936_update_completed_
+	R_next_ifetch_state_936_Update
+	phi_stmt_937_update_completed_
+	phi_stmt_937_update_start__ps
+	phi_stmt_937_update_completed__ps
+	phi_stmt_937_loopback_sample_req
+	phi_stmt_937_loopback_sample_req_ps
+	phi_stmt_937_entry_sample_req
+	phi_stmt_937_entry_sample_req_ps
+	phi_stmt_937_phi_mux_ack
+	phi_stmt_937_phi_mux_ack_ps
+	konst_939_update_start__ps
+	konst_939_update_completed__ps
+	konst_939_update_start_
+	konst_939_update_completed_
+	R_n_icache_state_940_update_start__ps
+	R_n_icache_state_940_update_completed__ps
+	R_n_icache_state_940_update_start_
+	R_n_icache_state_940_update_completed_
+	R_n_icache_state_940_Update
+	phi_stmt_941_update_completed_
+	phi_stmt_941_update_start__ps
+	phi_stmt_941_update_completed__ps
+	phi_stmt_941_loopback_sample_req
+	phi_stmt_941_loopback_sample_req_ps
+	phi_stmt_941_entry_sample_req
+	phi_stmt_941_entry_sample_req_ps
+	phi_stmt_941_phi_mux_ack
+	phi_stmt_941_phi_mux_ack_ps
+	konst_943_update_start__ps
+	konst_943_update_completed__ps
+	konst_943_update_start_
+	konst_943_update_completed_
+	R_n_idecode_state_944_update_start__ps
+	R_n_idecode_state_944_update_completed__ps
+	R_n_idecode_state_944_update_start_
+	R_n_idecode_state_944_update_completed_
+	R_n_idecode_state_944_Update
+	phi_stmt_945_update_completed_
+	phi_stmt_945_update_start__ps
+	phi_stmt_945_update_completed__ps
+	phi_stmt_945_loopback_sample_req
+	phi_stmt_945_loopback_sample_req_ps
+	phi_stmt_945_entry_sample_req
+	phi_stmt_945_entry_sample_req_ps
+	phi_stmt_945_phi_mux_ack
+	phi_stmt_945_phi_mux_ack_ps
+	konst_947_update_start__ps
+	konst_947_update_completed__ps
+	konst_947_update_start_
+	konst_947_update_completed_
+	R_n_iregfile_state_948_update_start__ps
+	R_n_iregfile_state_948_update_completed__ps
+	R_n_iregfile_state_948_update_start_
+	R_n_iregfile_state_948_update_completed_
+	R_n_iregfile_state_948_Update
+	phi_stmt_949_update_completed_
+	phi_stmt_949_update_start__ps
+	phi_stmt_949_update_completed__ps
+	phi_stmt_949_loopback_sample_req
+	phi_stmt_949_loopback_sample_req_ps
+	phi_stmt_949_entry_sample_req
+	phi_stmt_949_entry_sample_req_ps
+	phi_stmt_949_phi_mux_ack
+	phi_stmt_949_phi_mux_ack_ps
+	konst_951_update_start__ps
+	konst_951_update_completed__ps
+	konst_951_update_start_
+	konst_951_update_completed_
+	R_n_iexec_state_952_update_start__ps
+	R_n_iexec_state_952_update_completed__ps
+	R_n_iexec_state_952_update_start_
+	R_n_iexec_state_952_update_completed_
+	R_n_iexec_state_952_Update
+	phi_stmt_953_update_completed_
+	phi_stmt_953_update_start__ps
+	phi_stmt_953_update_completed__ps
+	phi_stmt_953_loopback_sample_req
+	phi_stmt_953_loopback_sample_req_ps
+	phi_stmt_953_entry_sample_req
+	phi_stmt_953_entry_sample_req_ps
+	phi_stmt_953_phi_mux_ack
+	phi_stmt_953_phi_mux_ack_ps
+	konst_955_update_start__ps
+	konst_955_update_completed__ps
+	konst_955_update_start_
+	konst_955_update_completed_
+	R_n_dcache_state_956_update_start__ps
+	R_n_dcache_state_956_update_completed__ps
+	R_n_dcache_state_956_update_start_
+	R_n_dcache_state_956_update_completed_
+	R_n_dcache_state_956_Update
+	phi_stmt_957_loopback_sample_req
+	phi_stmt_957_entry_sample_req
+	call_stmt_989_sample_start_
+	call_stmt_989_sample_completed_
+	call_stmt_989_update_start_
+	call_stmt_989_update_completed_
+	call_stmt_989_Sample
+	call_stmt_989_Update
+	assign_stmt_1001_sample_start_
+	assign_stmt_1001_sample_completed_
+	assign_stmt_1001_Sample
+	assign_stmt_1004_sample_start_
+	assign_stmt_1004_sample_completed_
+	assign_stmt_1004_Sample
+	assign_stmt_1007_sample_start_
+	assign_stmt_1007_sample_completed_
+	assign_stmt_1007_Sample
+	assign_stmt_1010_sample_start_
+	assign_stmt_1010_sample_completed_
+	assign_stmt_1010_Sample
+	call_stmt_1133_sample_start_
+	call_stmt_1133_sample_completed_
+	call_stmt_1133_update_start_
+	call_stmt_1133_update_completed_
+	call_stmt_1133_Sample
+	call_stmt_1133_Update
+	assign_stmt_1136_sample_start_
+	assign_stmt_1136_sample_completed_
+	assign_stmt_1136_update_start_
+	assign_stmt_1136_update_completed_
+	assign_stmt_1136_Sample
+	assign_stmt_1136_Update
+	MUX_1141_sample_start_
+	MUX_1141_sample_completed_
+	MUX_1141_start
+	call_stmt_1175_sample_start_
+	call_stmt_1175_sample_completed_
+	call_stmt_1175_Sample
+	call_stmt_1224_sample_start_
+	call_stmt_1224_sample_completed_
+	call_stmt_1224_Sample
+	assign_stmt_1227_sample_start_
+	assign_stmt_1227_sample_completed_
+	assign_stmt_1227_Sample
+	assign_stmt_1230_sample_start_
+	assign_stmt_1230_sample_completed_
+	assign_stmt_1230_Sample
+	assign_stmt_1239_sample_start_
+	assign_stmt_1239_sample_completed_
+	assign_stmt_1239_Sample
+	assign_stmt_1242_sample_start_
+	assign_stmt_1242_sample_completed_
+	assign_stmt_1242_Sample
+	assign_stmt_1251_sample_start_
+	assign_stmt_1251_sample_completed_
+	assign_stmt_1251_Sample
+	CONCAT_u16_u32_1259_sample_start_
+	CONCAT_u16_u32_1259_sample_completed_
+	CONCAT_u16_u32_1259_Sample
+	assign_stmt_1263_sample_start_
+	assign_stmt_1263_sample_completed_
+	assign_stmt_1263_Sample
+	EQ_u8_u1_1279_sample_start_
+	EQ_u8_u1_1279_sample_completed_
+	EQ_u8_u1_1279_Sample
+	assign_stmt_1283_sample_start_
+	assign_stmt_1283_sample_completed_
+	assign_stmt_1283_Sample
+	CONCAT_u24_u64_1299_sample_start_
+	CONCAT_u24_u64_1299_sample_completed_
+	CONCAT_u24_u64_1299_Sample
+	assign_stmt_1303_sample_start_
+	assign_stmt_1303_sample_completed_
+	assign_stmt_1303_Sample
+	CONCAT_u1_u11_1307_sample_start_
+	CONCAT_u1_u11_1307_sample_completed_
+	CONCAT_u1_u11_1307_Sample
+	loop_body_delay_to_condition_start
+	call_stmt_989_call_stmt_1175_delay
+Info: removed redundant fork point [R_one_10_935_sample_start__ps] &-> [R_one_10_935_sample_completed__ps]
+Info: removed redundant join point [R_one_10_935_sample_completed__ps] <-& [R_one_10_935_sample_start__ps]
+Info: removed redundant fork point [R_next_ifetch_state_936_sample_start__ps] &-> [R_next_ifetch_state_936_sample_completed__ps]
+Info: removed redundant join point [R_next_ifetch_state_936_sample_completed__ps] <-& [R_next_ifetch_state_936_sample_start__ps]
+Info: removed redundant fork point [konst_939_sample_start__ps] &-> [konst_939_sample_completed__ps]
+Info: removed redundant join point [konst_939_sample_completed__ps] <-& [konst_939_sample_start__ps]
+Info: removed redundant fork point [R_n_icache_state_940_sample_start__ps] &-> [R_n_icache_state_940_sample_completed__ps]
+Info: removed redundant join point [R_n_icache_state_940_sample_completed__ps] <-& [R_n_icache_state_940_sample_start__ps]
+Info: removed redundant fork point [konst_943_sample_start__ps] &-> [konst_943_sample_completed__ps]
+Info: removed redundant join point [konst_943_sample_completed__ps] <-& [konst_943_sample_start__ps]
+Info: removed redundant fork point [R_n_idecode_state_944_sample_start__ps] &-> [R_n_idecode_state_944_sample_completed__ps]
+Info: removed redundant join point [R_n_idecode_state_944_sample_completed__ps] <-& [R_n_idecode_state_944_sample_start__ps]
+Info: removed redundant fork point [konst_947_sample_start__ps] &-> [konst_947_sample_completed__ps]
+Info: removed redundant join point [konst_947_sample_completed__ps] <-& [konst_947_sample_start__ps]
+Info: removed redundant fork point [R_n_iregfile_state_948_sample_start__ps] &-> [R_n_iregfile_state_948_sample_completed__ps]
+Info: removed redundant join point [R_n_iregfile_state_948_sample_completed__ps] <-& [R_n_iregfile_state_948_sample_start__ps]
+Info: removed redundant fork point [konst_951_sample_start__ps] &-> [konst_951_sample_completed__ps]
+Info: removed redundant join point [konst_951_sample_completed__ps] <-& [konst_951_sample_start__ps]
+Info: removed redundant fork point [R_n_iexec_state_952_sample_start__ps] &-> [R_n_iexec_state_952_sample_completed__ps]
+Info: removed redundant join point [R_n_iexec_state_952_sample_completed__ps] <-& [R_n_iexec_state_952_sample_start__ps]
+Info: removed redundant fork point [konst_955_sample_start__ps] &-> [konst_955_sample_completed__ps]
+Info: removed redundant join point [konst_955_sample_completed__ps] <-& [konst_955_sample_start__ps]
+Info: removed redundant fork point [R_n_dcache_state_956_sample_start__ps] &-> [R_n_dcache_state_956_sample_completed__ps]
+Info: removed redundant join point [R_n_dcache_state_956_sample_completed__ps] <-& [R_n_dcache_state_956_sample_start__ps]
+Info: removed redundant fork point [konst_959_sample_start__ps] &-> [konst_959_sample_completed__ps]
+Info: removed redundant join point [konst_959_sample_completed__ps] <-& [konst_959_sample_start__ps]
+Info: removed redundant fork point [R_n_iRetire_state_960_sample_start__ps] &-> [R_n_iRetire_state_960_sample_completed__ps]
+Info: removed redundant join point [R_n_iRetire_state_960_sample_completed__ps] <-& [R_n_iRetire_state_960_sample_start__ps]
+Info: removed redundant fork point [R_one_10_935_update_start__ps] &-> [R_one_10_935_update_completed__ps]
+Info: removed redundant join point [R_one_10_935_update_completed__ps] <-& [R_one_10_935_update_start__ps]
+Info: removed redundant fork point [R_next_ifetch_state_936_update_start__ps] &-> [R_next_ifetch_state_936_update_completed__ps]
+Info: removed redundant join point [R_next_ifetch_state_936_update_completed__ps] <-& [R_next_ifetch_state_936_update_start__ps]
+Info: removed redundant fork point [konst_939_update_start__ps] &-> [konst_939_update_completed__ps]
+Info: removed redundant join point [konst_939_update_completed__ps] <-& [konst_939_update_start__ps]
+Info: removed redundant fork point [R_n_icache_state_940_update_start__ps] &-> [R_n_icache_state_940_update_completed__ps]
+Info: removed redundant join point [R_n_icache_state_940_update_completed__ps] <-& [R_n_icache_state_940_update_start__ps]
+Info: removed redundant fork point [konst_943_update_start__ps] &-> [konst_943_update_completed__ps]
+Info: removed redundant join point [konst_943_update_completed__ps] <-& [konst_943_update_start__ps]
+Info: removed redundant fork point [R_n_idecode_state_944_update_start__ps] &-> [R_n_idecode_state_944_update_completed__ps]
+Info: removed redundant join point [R_n_idecode_state_944_update_completed__ps] <-& [R_n_idecode_state_944_update_start__ps]
+Info: removed redundant fork point [konst_947_update_start__ps] &-> [konst_947_update_completed__ps]
+Info: removed redundant join point [konst_947_update_completed__ps] <-& [konst_947_update_start__ps]
+Info: removed redundant fork point [R_n_iregfile_state_948_update_start__ps] &-> [R_n_iregfile_state_948_update_completed__ps]
+Info: removed redundant join point [R_n_iregfile_state_948_update_completed__ps] <-& [R_n_iregfile_state_948_update_start__ps]
+Info: removed redundant fork point [konst_951_update_start__ps] &-> [konst_951_update_completed__ps]
+Info: removed redundant join point [konst_951_update_completed__ps] <-& [konst_951_update_start__ps]
+Info: removed redundant fork point [R_n_iexec_state_952_update_start__ps] &-> [R_n_iexec_state_952_update_completed__ps]
+Info: removed redundant join point [R_n_iexec_state_952_update_completed__ps] <-& [R_n_iexec_state_952_update_start__ps]
+Info: removed redundant fork point [konst_955_update_start__ps] &-> [konst_955_update_completed__ps]
+Info: removed redundant join point [konst_955_update_completed__ps] <-& [konst_955_update_start__ps]
+Info: removed redundant fork point [R_n_dcache_state_956_update_start__ps] &-> [R_n_dcache_state_956_update_completed__ps]
+Info: removed redundant join point [R_n_dcache_state_956_update_completed__ps] <-& [R_n_dcache_state_956_update_start__ps]
+Info: removed redundant fork point [konst_959_update_start__ps] &-> [konst_959_update_completed__ps]
+Info: removed redundant join point [konst_959_update_completed__ps] <-& [konst_959_update_start__ps]
+Info: removed redundant fork point [R_n_iRetire_state_960_update_start__ps] &-> [R_n_iRetire_state_960_update_completed__ps]
+Info: removed redundant join point [R_n_iRetire_state_960_update_completed__ps] <-& [R_n_iRetire_state_960_update_start__ps]
+Info: removed redundant marked link: [phi_stmt_937_update_start_] o<-& [phi_stmt_937_update_completed_]
+Info: removed redundant marked link: [phi_stmt_945_update_start_] o<-& [phi_stmt_945_update_completed_]
+Info: removed redundant marked link: [phi_stmt_933_update_start_] o<-& [phi_stmt_933_update_completed_]
+Info: removed redundant marked link: [assign_stmt_1136_update_start_] o<-& [assign_stmt_1136_update_completed_]
+Info: removed redundant marked link: [call_stmt_1133_update_start_] o<-& [call_stmt_1133_update_completed_]
+Info: removed redundant marked link: [phi_stmt_941_update_start_] o<-& [phi_stmt_941_update_completed_]
+Info: removed redundant marked link: [phi_stmt_949_update_start_] o<-& [phi_stmt_949_update_completed_]
+Info: removed redundant marked link: [phi_stmt_953_update_start_] o<-& [phi_stmt_953_update_completed_]
+Info: removed redundant marked link: [phi_stmt_957_update_start_] o<-& [phi_stmt_957_update_completed_]
+Info: removed redundant join point [R_one_10_935_sample_completed__ps] <-& [R_one_10_935_sample_start__ps]
+Info: removed redundant fork point [R_one_10_935_sample_start__ps] &-> [R_one_10_935_sample_completed__ps]
+Info: removed redundant join point [R_n_icache_state_940_sample_completed__ps] <-& [R_n_icache_state_940_sample_start__ps]
+Info: removed redundant fork point [R_n_icache_state_940_sample_start__ps] &-> [R_n_icache_state_940_sample_completed__ps]
+Info: removed redundant join point [konst_939_update_completed__ps] <-& [konst_939_update_start__ps]
+Info: removed redundant fork point [konst_939_update_start__ps] &-> [konst_939_update_completed__ps]
+Info: removed redundant join point [R_next_ifetch_state_936_sample_completed__ps] <-& [R_next_ifetch_state_936_sample_start__ps]
+Info: removed redundant fork point [R_next_ifetch_state_936_sample_start__ps] &-> [R_next_ifetch_state_936_sample_completed__ps]
+Info: removed redundant join point [R_next_ifetch_state_936_update_completed__ps] <-& [R_next_ifetch_state_936_update_start__ps]
+Info: removed redundant fork point [R_next_ifetch_state_936_update_start__ps] &-> [R_next_ifetch_state_936_update_completed__ps]
+Info: removed redundant join point [konst_939_sample_completed__ps] <-& [konst_939_sample_start__ps]
+Info: removed redundant fork point [konst_939_sample_start__ps] &-> [konst_939_sample_completed__ps]
+Info: removed redundant join point [R_one_10_935_update_completed__ps] <-& [R_one_10_935_update_start__ps]
+Info: removed redundant fork point [R_one_10_935_update_start__ps] &-> [R_one_10_935_update_completed__ps]
+Info: removed redundant join point [R_n_idecode_state_944_update_completed__ps] <-& [R_n_idecode_state_944_update_start__ps]
+Info: removed redundant fork point [R_n_idecode_state_944_update_start__ps] &-> [R_n_idecode_state_944_update_completed__ps]
+Info: removed redundant join point [R_n_idecode_state_944_sample_completed__ps] <-& [R_n_idecode_state_944_sample_start__ps]
+Info: removed redundant fork point [R_n_idecode_state_944_sample_start__ps] &-> [R_n_idecode_state_944_sample_completed__ps]
+Info: removed redundant join point [konst_943_update_completed__ps] <-& [konst_943_update_start__ps]
+Info: removed redundant fork point [konst_943_update_start__ps] &-> [konst_943_update_completed__ps]
+Info: removed redundant join point [R_n_icache_state_940_update_completed__ps] <-& [R_n_icache_state_940_update_start__ps]
+Info: removed redundant fork point [R_n_icache_state_940_update_start__ps] &-> [R_n_icache_state_940_update_completed__ps]
+Info: removed redundant join point [konst_943_sample_completed__ps] <-& [konst_943_sample_start__ps]
+Info: removed redundant fork point [konst_943_sample_start__ps] &-> [konst_943_sample_completed__ps]
+Info: removed redundant join point [konst_947_sample_completed__ps] <-& [konst_947_sample_start__ps]
+Info: removed redundant fork point [konst_947_sample_start__ps] &-> [konst_947_sample_completed__ps]
+Info: removed redundant join point [konst_947_update_completed__ps] <-& [konst_947_update_start__ps]
+Info: removed redundant fork point [konst_947_update_start__ps] &-> [konst_947_update_completed__ps]
+Info: removed redundant join point [R_n_iregfile_state_948_sample_completed__ps] <-& [R_n_iregfile_state_948_sample_start__ps]
+Info: removed redundant fork point [R_n_iregfile_state_948_sample_start__ps] &-> [R_n_iregfile_state_948_sample_completed__ps]
+Info: removed redundant join point [R_n_iregfile_state_948_update_completed__ps] <-& [R_n_iregfile_state_948_update_start__ps]
+Info: removed redundant fork point [R_n_iregfile_state_948_update_start__ps] &-> [R_n_iregfile_state_948_update_completed__ps]
+Info: removed redundant join point [konst_951_sample_completed__ps] <-& [konst_951_sample_start__ps]
+Info: removed redundant fork point [konst_951_sample_start__ps] &-> [konst_951_sample_completed__ps]
+Info: removed redundant join point [konst_951_update_completed__ps] <-& [konst_951_update_start__ps]
+Info: removed redundant fork point [konst_951_update_start__ps] &-> [konst_951_update_completed__ps]
+Info: removed redundant join point [R_n_iexec_state_952_sample_completed__ps] <-& [R_n_iexec_state_952_sample_start__ps]
+Info: removed redundant fork point [R_n_iexec_state_952_sample_start__ps] &-> [R_n_iexec_state_952_sample_completed__ps]
+Info: removed redundant join point [R_n_iexec_state_952_update_completed__ps] <-& [R_n_iexec_state_952_update_start__ps]
+Info: removed redundant fork point [R_n_iexec_state_952_update_start__ps] &-> [R_n_iexec_state_952_update_completed__ps]
+Info: removed redundant join point [konst_955_sample_completed__ps] <-& [konst_955_sample_start__ps]
+Info: removed redundant fork point [konst_955_sample_start__ps] &-> [konst_955_sample_completed__ps]
+Info: removed redundant join point [konst_955_update_completed__ps] <-& [konst_955_update_start__ps]
+Info: removed redundant fork point [konst_955_update_start__ps] &-> [konst_955_update_completed__ps]
+Info: removed redundant join point [R_n_dcache_state_956_sample_completed__ps] <-& [R_n_dcache_state_956_sample_start__ps]
+Info: removed redundant fork point [R_n_dcache_state_956_sample_start__ps] &-> [R_n_dcache_state_956_sample_completed__ps]
+Info: removed redundant join point [R_n_dcache_state_956_update_completed__ps] <-& [R_n_dcache_state_956_update_start__ps]
+Info: removed redundant fork point [R_n_dcache_state_956_update_start__ps] &-> [R_n_dcache_state_956_update_completed__ps]
+Info: removed redundant join point [condition_evaluated] <-& [phi_stmt_957_update_completed_]
+Info: removed redundant fork point [phi_stmt_957_update_completed_] &-> [condition_evaluated]
+Info: removed redundant join point [konst_959_sample_completed__ps] <-& [konst_959_sample_start__ps]
+Info: removed redundant fork point [konst_959_sample_start__ps] &-> [konst_959_sample_completed__ps]
+Info: removed redundant join point [konst_959_update_completed__ps] <-& [konst_959_update_start__ps]
+Info: removed redundant fork point [konst_959_update_start__ps] &-> [konst_959_update_completed__ps]
+Info: removed redundant join point [R_n_iRetire_state_960_sample_completed__ps] <-& [R_n_iRetire_state_960_sample_start__ps]
+Info: removed redundant fork point [R_n_iRetire_state_960_sample_start__ps] &-> [R_n_iRetire_state_960_sample_completed__ps]
+Info: removed redundant join point [R_n_iRetire_state_960_update_completed__ps] <-& [R_n_iRetire_state_960_update_start__ps]
+Info: removed redundant fork point [R_n_iRetire_state_960_update_start__ps] &-> [R_n_iRetire_state_960_update_completed__ps]
+Info: reducing Control-path 
+Info: removed CP-element dead_transition maybe it was dead?
+Info: removed CP-element $exit maybe it was dead?
+Info: removed CP-element dead_transition maybe it was dead?
+Info: removed CP-element $exit maybe it was dead?
+Info: finding nucleii 
+Info:  Total number of strongly-connected-components is 200
+Info: SCC 0
+	e_3
+Info: SCC 1
+	e_4
+Info: SCC 2
+	e_2
+Info: SCC 3
+	e_1
+Info: SCC 4
+	e_247
+Info: SCC 5
+	e_0
+Info: SCC 6
+	e_5
+Info: SCC 7
+	e_6
+Info: SCC 8
+	e_246
+Info: SCC 9
+	e_7
+Info: SCC 10
+	e_8
+Info: SCC 11
+	e_244
+Info: SCC 12
+	e_245
+Info: SCC 13
+	e_9
+Info: SCC 14
+	e_10
+Info: SCC 15
+	e_137
+Info: SCC 16
+	e_120
+Info: SCC 17
+	e_25
+Info: SCC 18
+	e_44
+Info: SCC 19
+	e_63
+Info: SCC 20
+	e_82
+Info: SCC 21
+	e_101
+Info: SCC 22
+	e_11
+Info: SCC 23
+	e_139
+Info: SCC 24
+	e_122
+Info: SCC 25
+	e_27
+Info: SCC 26
+	e_46
+Info: SCC 27
+	e_65
+Info: SCC 28
+	e_84
+Info: SCC 29
+	e_103
+Info: SCC 30
+	e_12
+Info: SCC 31
+	e_116
+Info: SCC 32
+	e_21
+Info: SCC 33
+	e_40
+Info: SCC 34
+	e_59
+Info: SCC 35
+	e_78
+Info: SCC 36
+	e_97
+Info: SCC 37
+	e_15
+Info: SCC 38
+	e_133
+Info: SCC 39
+	e_118
+Info: SCC 40
+	e_23
+Info: SCC 41
+	e_42
+Info: SCC 42
+	e_61
+Info: SCC 43
+	e_80
+Info: SCC 44
+	e_99
+Info: SCC 45
+	e_17
+Info: SCC 46
+	e_134
+Info: SCC 47
+	e_14
+Info: SCC 48
+	e_241
+Info: SCC 49
+	e_114
+Info: SCC 50
+	e_115
+Info: SCC 51
+	e_19
+Info: SCC 52
+	e_20
+Info: SCC 53
+	e_38
+Info: SCC 54
+	e_39
+Info: SCC 55
+	e_57
+Info: SCC 56
+	e_58
+Info: SCC 57
+	e_76
+Info: SCC 58
+	e_77
+Info: SCC 59
+	e_95
+Info: SCC 60
+	e_96
+Info: SCC 61
+	e_13
+Info: SCC 62
+	e_243
+Info: SCC 63
+	e_195
+	e_197
+Info: SCC 64
+	e_199
+	e_201
+Info: SCC 65
+	e_203
+	e_205
+Info: SCC 66
+	e_179
+	e_181
+Info: SCC 67
+	e_227
+	e_229
+Info: SCC 68
+	e_231
+	e_233
+Info: SCC 69
+	e_235
+	e_237
+Info: SCC 70
+	e_207
+	e_209
+Info: SCC 71
+	e_211
+	e_213
+Info: SCC 72
+	e_215
+	e_217
+Info: SCC 73
+	e_219
+	e_221
+Info: SCC 74
+	e_223
+	e_225
+Info: SCC 75
+	e_159
+	e_161
+Info: SCC 76
+	e_163
+	e_165
+Info: SCC 77
+	e_167
+	e_169
+Info: SCC 78
+	e_182
+	e_184
+Info: SCC 79
+	e_242
+Info: SCC 80
+	e_151
+	e_153
+Info: SCC 81
+	e_155
+	e_157
+Info: SCC 82
+	e_150
+	e_152
+Info: SCC 83
+	e_183
+	e_185
+Info: SCC 84
+	e_187
+	e_189
+Info: SCC 85
+	e_193
+	e_191
+Info: SCC 86
+	e_16
+Info: SCC 87
+	e_18
+Info: SCC 88
+	e_22
+Info: SCC 89
+	e_198
+	e_200
+Info: SCC 90
+	e_170
+	e_172
+Info: SCC 91
+	e_174
+	e_176
+Info: SCC 92
+	e_206
+	e_208
+Info: SCC 93
+	e_154
+	e_156
+Info: SCC 94
+	e_160
+	e_158
+Info: SCC 95
+	e_186
+	e_188
+Info: SCC 96
+	e_190
+	e_192
+Info: SCC 97
+	e_24
+Info: SCC 98
+	e_26
+Info: SCC 99
+	e_28
+Info: SCC 100
+	e_29
+Info: SCC 101
+	e_30
+Info: SCC 102
+	e_32
+Info: SCC 103
+	e_33
+Info: SCC 104
+	e_31
+Info: SCC 105
+	e_36
+Info: SCC 106
+	e_34
+Info: SCC 107
+	e_37
+Info: SCC 108
+	e_35
+Info: SCC 109
+	e_41
+Info: SCC 110
+	e_166
+	e_168
+Info: SCC 111
+	e_43
+Info: SCC 112
+	e_45
+Info: SCC 113
+	e_47
+Info: SCC 114
+	e_48
+Info: SCC 115
+	e_49
+Info: SCC 116
+	e_51
+Info: SCC 117
+	e_52
+Info: SCC 118
+	e_50
+Info: SCC 119
+	e_55
+Info: SCC 120
+	e_53
+Info: SCC 121
+	e_56
+Info: SCC 122
+	e_54
+Info: SCC 123
+	e_60
+Info: SCC 124
+	e_162
+	e_164
+Info: SCC 125
+	e_62
+Info: SCC 126
+	e_64
+Info: SCC 127
+	e_66
+Info: SCC 128
+	e_67
+Info: SCC 129
+	e_68
+Info: SCC 130
+	e_70
+Info: SCC 131
+	e_71
+Info: SCC 132
+	e_69
+Info: SCC 133
+	e_74
+Info: SCC 134
+	e_72
+Info: SCC 135
+	e_75
+Info: SCC 136
+	e_73
+Info: SCC 137
+	e_79
+Info: SCC 138
+	e_210
+	e_212
+Info: SCC 139
+	e_214
+	e_216
+Info: SCC 140
+	e_81
+Info: SCC 141
+	e_83
+Info: SCC 142
+	e_85
+Info: SCC 143
+	e_86
+Info: SCC 144
+	e_87
+Info: SCC 145
+	e_89
+Info: SCC 146
+	e_90
+Info: SCC 147
+	e_88
+Info: SCC 148
+	e_93
+Info: SCC 149
+	e_91
+Info: SCC 150
+	e_94
+Info: SCC 151
+	e_92
+Info: SCC 152
+	e_98
+Info: SCC 153
+	e_100
+Info: SCC 154
+	e_102
+Info: SCC 155
+	e_104
+Info: SCC 156
+	e_105
+Info: SCC 157
+	e_106
+Info: SCC 158
+	e_108
+Info: SCC 159
+	e_109
+Info: SCC 160
+	e_107
+Info: SCC 161
+	e_112
+Info: SCC 162
+	e_110
+Info: SCC 163
+	e_113
+Info: SCC 164
+	e_111
+Info: SCC 165
+	e_117
+Info: SCC 166
+	e_230
+	e_232
+Info: SCC 167
+	e_234
+	e_236
+Info: SCC 168
+	e_218
+	e_220
+Info: SCC 169
+	e_222
+	e_224
+Info: SCC 170
+	e_228
+	e_226
+Info: SCC 171
+	e_119
+Info: SCC 172
+	e_121
+Info: SCC 173
+	e_123
+Info: SCC 174
+	e_124
+Info: SCC 175
+	e_125
+Info: SCC 176
+	e_127
+Info: SCC 177
+	e_128
+Info: SCC 178
+	e_126
+Info: SCC 179
+	e_131
+Info: SCC 180
+	e_129
+Info: SCC 181
+	e_132
+Info: SCC 182
+	e_130
+Info: SCC 183
+	e_135
+Info: SCC 184
+	e_238
+	e_239
+	e_240
+Info: SCC 185
+	e_194
+	e_196
+Info: SCC 186
+	e_202
+	e_204
+Info: SCC 187
+	e_136
+Info: SCC 188
+	e_138
+Info: SCC 189
+	e_140
+Info: SCC 190
+	e_141
+Info: SCC 191
+	e_142
+Info: SCC 192
+	e_144
+Info: SCC 193
+	e_145
+Info: SCC 194
+	e_143
+Info: SCC 195
+	e_148
+Info: SCC 196
+	e_146
+Info: SCC 197
+	e_149
+Info: SCC 198
+	e_147
+Info: SCC 199
+	e_171
+	e_173
+	e_175
+	e_177
+	e_178
+	e_180
+Warning: all elements not reachable from entry in region branch_block_stmt_1384/do_while_stmt_1385/do_while_stmt_1385_loop_body
+	 un-visited elements
+	back_edge_to_loop_body
+	first_time_through_loop_body
+	loop_body_start
+	condition_evaluated
+	call_stmt_1427_update_start_
+	call_stmt_1427_update_completed_
+	call_stmt_1427_Update
+	WPIPE_accessReg_response1_1428_sample_start_
+	WPIPE_accessReg_response1_1428_sample_completed_
+	WPIPE_accessReg_response1_1428_update_start_
+	WPIPE_accessReg_response1_1428_update_completed_
+	WPIPE_accessReg_response1_1428_Sample
+	WPIPE_accessReg_response1_1428_Update
+	WPIPE_accessReg_response2_1431_sample_start_
+	WPIPE_accessReg_response2_1431_sample_completed_
+	WPIPE_accessReg_response2_1431_update_start_
+	WPIPE_accessReg_response2_1431_update_completed_
+	WPIPE_accessReg_response2_1431_Sample
+	WPIPE_accessReg_response2_1431_Update
+	loop_body_delay_to_condition_start
+	$exit
+Warning: exit not reachable from every element in region branch_block_stmt_1384/do_while_stmt_1385/do_while_stmt_1385_loop_body
+	 un-visited elements
+	back_edge_to_loop_body
+	first_time_through_loop_body
+	loop_body_start
+	condition_evaluated
+	RPIPE_accessReg_request_1388_sample_start_
+	RPIPE_accessReg_request_1388_sample_completed_
+	RPIPE_accessReg_request_1388_update_start_
+	RPIPE_accessReg_request_1388_update_completed_
+	RPIPE_accessReg_request_1388_Sample
+	RPIPE_accessReg_request_1388_Update
+	call_stmt_1427_sample_start_
+	call_stmt_1427_sample_completed_
+	call_stmt_1427_Sample
+	loop_body_delay_to_condition_start
+	$entry
+Info: removed redundant marked link: [call_stmt_1427_update_start_] o<-& [call_stmt_1427_update_completed_]
+Info: reducing Control-path 
+Info: finding nucleii 
+Info:  Total number of strongly-connected-components is 17
+Info: SCC 0
+	e_0
+Info: SCC 1
+	e_1
+Info: SCC 2
+	e_2
+Info: SCC 3
+	e_28
+Info: SCC 4
+	e_3
+Info: SCC 5
+	e_4
+Info: SCC 6
+	e_26
+Info: SCC 7
+	e_27
+Info: SCC 8
+	e_5
+Info: SCC 9
+	e_6
+Info: SCC 10
+	e_7
+Info: SCC 11
+	e_8
+Info: SCC 12
+	e_10
+	e_11
+	e_12
+	e_13
+	e_14
+	e_16
+Info: SCC 13
+	e_24
+Info: SCC 14
+	e_9
+Info: SCC 15
+	e_25
+Info: SCC 16
+	e_15
+	e_17
+	e_18
+	e_19
+	e_20
+	e_21
+	e_22
+	e_23
+Info: reducing Control-path 
+Info: finding nucleii 
+Info:  Total number of strongly-connected-components is 1
+Info: SCC 0
+	e_0
+Info: array_obj_ref_136_load_0 included in vcLoad group 0
+Info: array_obj_ref_140_store_0 included in vcStore group 0
+Info: array_obj_ref_166_load_0 included in vcLoad group 0
+Info: array_obj_ref_171_load_0 included in vcLoad group 0
+Info: array_obj_ref_193_store_0 included in vcStore group 0
+Info: ADD_u10_u10_370_inst included in vcBinarySplitOperator group 0
+Info: ADD_u32_u32_253_inst included in vcBinarySplitOperator group 1
+Info: AND_u1_u1_444_inst included in vcBinarySplitOperator group 2
+Info: AND_u1_u1_449_inst included in vcBinarySplitOperator group 3
+Info: AND_u32_u32_228_inst included in vcBinarySplitOperator group 4
+Info: AND_u32_u32_238_inst included in vcBinarySplitOperator group 5
+Info: CONCAT_u16_u24_463_inst included in vcBinarySplitOperator group 6
+Info: CONCAT_u1_u11_473_inst included in vcBinarySplitOperator group 7
+Info: CONCAT_u24_u64_467_inst included in vcBinarySplitOperator group 8
+Info: CONCAT_u32_u64_470_inst included in vcBinarySplitOperator group 9
+Info: CONCAT_u64_u139_475_inst included in vcBinarySplitOperator group 10
+Info: CONCAT_u64_u75_474_inst included in vcBinarySplitOperator group 11
+Info: CONCAT_u8_u16_461_inst included in vcBinarySplitOperator group 12
+Info: CONCAT_u8_u40_466_inst included in vcBinarySplitOperator group 13
+Info: EQ_u32_u1_275_inst included in vcBinarySplitOperator group 14
+Info: EQ_u8_u1_297_inst included in vcBinarySplitOperator group 15
+Info: EQ_u8_u1_306_inst included in vcBinarySplitOperator group 16
+Info: EQ_u8_u1_313_inst included in vcBinarySplitOperator group 17
+Info: EQ_u8_u1_320_inst included in vcBinarySplitOperator group 18
+Info: EQ_u8_u1_326_inst included in vcBinarySplitOperator group 19
+Info: EQ_u8_u1_333_inst included in vcBinarySplitOperator group 20
+Info: EQ_u8_u1_341_inst included in vcBinarySplitOperator group 21
+Info: EQ_u8_u1_347_inst included in vcBinarySplitOperator group 22
+Info: EQ_u8_u1_354_inst included in vcBinarySplitOperator group 23
+Info: EQ_u8_u1_361_inst included in vcBinarySplitOperator group 24
+Info: EQ_u8_u1_367_inst included in vcBinarySplitOperator group 25
+Info: EQ_u8_u1_381_inst included in vcBinarySplitOperator group 26
+Info: EQ_u8_u1_442_inst included in vcBinarySplitOperator group 27
+Info: EQ_u8_u1_447_inst included in vcBinarySplitOperator group 28
+Info: LSHR_u32_u32_269_inst included in vcBinarySplitOperator group 29
+Info: LSHR_u32_u32_396_inst included in vcBinarySplitOperator group 30
+Info: LSHR_u32_u32_409_inst included in vcBinarySplitOperator group 31
+Info: NOT_u1_u1_434_inst included in vcUnarySplitOperator group 32
+Info: OR_u1_u1_450_inst included in vcBinarySplitOperator group 33
+Info: OR_u32_u32_233_inst included in vcBinarySplitOperator group 34
+Info: OR_u32_u32_285_inst included in vcBinarySplitOperator group 35
+Info: OR_u32_u32_292_inst included in vcBinarySplitOperator group 36
+Info: OR_u32_u32_301_inst included in vcBinarySplitOperator group 37
+Info: OR_u32_u32_310_inst included in vcBinarySplitOperator group 38
+Info: OR_u32_u32_317_inst included in vcBinarySplitOperator group 39
+Info: OR_u32_u32_330_inst included in vcBinarySplitOperator group 40
+Info: OR_u32_u32_337_inst included in vcBinarySplitOperator group 41
+Info: OR_u32_u32_338_inst included in vcBinarySplitOperator group 42
+Info: OR_u32_u32_351_inst included in vcBinarySplitOperator group 43
+Info: OR_u32_u32_358_inst included in vcBinarySplitOperator group 44
+Info: OR_u32_u32_374_inst included in vcBinarySplitOperator group 45
+Info: OR_u32_u32_375_inst included in vcBinarySplitOperator group 46
+Info: OR_u32_u32_376_inst included in vcBinarySplitOperator group 47
+Info: OR_u32_u32_420_inst included in vcBinarySplitOperator group 48
+Info: SHL_u32_u32_263_inst included in vcBinarySplitOperator group 49
+Info: SHL_u32_u32_414_inst included in vcBinarySplitOperator group 50
+Info: SUB_u32_u32_258_inst included in vcBinarySplitOperator group 51
+Info: SUB_u32_u32_410_inst included in vcBinarySplitOperator group 52
+Info: SUB_u32_u32_413_inst included in vcBinarySplitOperator group 53
+Info: UGT_u32_u1_288_inst included in vcBinarySplitOperator group 54
+Info: ULT_u32_u1_281_inst included in vcBinarySplitOperator group 55
+Info: XOR_u32_u32_243_inst included in vcBinarySplitOperator group 56
+Info: XOR_u32_u32_248_inst included in vcBinarySplitOperator group 57
+Info: RPIPE_accessMem_request_483_inst included in vcInport group 0
+Info: WPIPE_accessMem_response_502_inst included in vcOutport group 0
+Info: call_stmt_501_call included in vcCall group 0
+Info: ADD_u10_u10_1349_inst included in vcBinarySplitOperator group 0
+Info: CONCAT_u16_u24_1295_inst included in vcBinarySplitOperator group 1
+Info: CONCAT_u16_u32_1259_inst included in vcBinarySplitOperator group 2
+Info: CONCAT_u1_u11_1307_inst included in vcBinarySplitOperator group 3
+Info: CONCAT_u24_u64_1299_inst included in vcBinarySplitOperator group 4
+Info: CONCAT_u32_u106_1273_inst included in vcBinarySplitOperator group 5
+Info: CONCAT_u32_u42_1018_inst included in vcBinarySplitOperator group 6
+Info: CONCAT_u32_u64_1270_inst included in vcBinarySplitOperator group 7
+Info: CONCAT_u32_u64_1313_inst included in vcBinarySplitOperator group 8
+Info: CONCAT_u64_u139_1316_inst included in vcBinarySplitOperator group 9
+Info: CONCAT_u64_u74_1272_inst included in vcBinarySplitOperator group 10
+Info: CONCAT_u64_u75_1315_inst included in vcBinarySplitOperator group 11
+Info: CONCAT_u8_u16_1255_inst included in vcBinarySplitOperator group 12
+Info: CONCAT_u8_u16_1258_inst included in vcBinarySplitOperator group 13
+Info: CONCAT_u8_u16_1293_inst included in vcBinarySplitOperator group 14
+Info: CONCAT_u8_u40_1298_inst included in vcBinarySplitOperator group 15
+Info: EQ_u8_u1_1279_inst included in vcBinarySplitOperator group 16
+Info: EQ_u8_u1_1321_inst included in vcBinarySplitOperator group 17
+Info: EQ_u8_u1_1329_inst included in vcBinarySplitOperator group 18
+Info: EQ_u8_u1_1333_inst included in vcBinarySplitOperator group 19
+Info: EQ_u8_u1_1376_inst included in vcBinarySplitOperator group 20
+Info: EQ_u8_u1_929_inst included in vcBinarySplitOperator group 21
+Info: NOT_u1_u1_1377_inst included in vcUnarySplitOperator group 22
+Info: RPIPE_start_processor_924_inst included in vcInport group 0
+Info: WPIPE_processor_result_1370_inst included in vcOutport group 0
+Info: call_stmt_1133_call included in vcCall group 0
+Info: call_stmt_1175_call included in vcCall group 1
+Info: call_stmt_1224_call included in vcCall group 2
+Info: call_stmt_984_call included in vcCall group 3
+Info: call_stmt_989_call included in vcCall group 1
+Info: RPIPE_accessReg_request_1388_inst included in vcInport group 0
+Info: WPIPE_accessReg_response1_1428_inst included in vcOutport group 0
+Info: WPIPE_accessReg_response2_1431_inst included in vcOutport group 1
+Info: call_stmt_1427_call included in vcCall group 0
+Info: AND_u1_u1_639_inst included in vcBinarySplitOperator group 0
+Info: AND_u1_u1_648_inst included in vcBinarySplitOperator group 1
+Info: AND_u1_u1_718_inst included in vcBinarySplitOperator group 2
+Info: AND_u1_u1_727_inst included in vcBinarySplitOperator group 3
+Info: AND_u1_u1_736_inst included in vcBinarySplitOperator group 4
+Info: AND_u1_u1_745_inst included in vcBinarySplitOperator group 5
+Info: AND_u1_u1_766_inst included in vcBinarySplitOperator group 6
+Info: AND_u1_u1_775_inst included in vcBinarySplitOperator group 7
+Info: AND_u1_u1_785_inst included in vcBinarySplitOperator group 8
+Info: AND_u1_u1_797_inst included in vcBinarySplitOperator group 9
+Info: AND_u1_u1_798_inst included in vcBinarySplitOperator group 10
+Info: CONCAT_u1_u2_887_inst included in vcBinarySplitOperator group 11
+Info: CONCAT_u1_u2_892_inst included in vcBinarySplitOperator group 12
+Info: CONCAT_u1_u2_898_inst included in vcBinarySplitOperator group 13
+Info: CONCAT_u1_u2_901_inst included in vcBinarySplitOperator group 14
+Info: CONCAT_u1_u2_915_inst included in vcBinarySplitOperator group 15
+Info: CONCAT_u2_u3_889_inst included in vcBinarySplitOperator group 16
+Info: CONCAT_u2_u3_917_inst included in vcBinarySplitOperator group 17
+Info: CONCAT_u2_u4_902_inst included in vcBinarySplitOperator group 18
+Info: CONCAT_u3_u5_893_inst included in vcBinarySplitOperator group 19
+Info: EQ_u1_u1_635_inst included in vcBinarySplitOperator group 20
+Info: EQ_u1_u1_644_inst included in vcBinarySplitOperator group 21
+Info: EQ_u1_u1_714_inst included in vcBinarySplitOperator group 22
+Info: EQ_u1_u1_723_inst included in vcBinarySplitOperator group 23
+Info: EQ_u1_u1_732_inst included in vcBinarySplitOperator group 24
+Info: EQ_u1_u1_741_inst included in vcBinarySplitOperator group 25
+Info: EQ_u1_u1_762_inst included in vcBinarySplitOperator group 26
+Info: EQ_u1_u1_771_inst included in vcBinarySplitOperator group 27
+Info: EQ_u1_u1_803_inst included in vcBinarySplitOperator group 28
+Info: EQ_u1_u1_806_inst included in vcBinarySplitOperator group 29
+Info: EQ_u1_u1_812_inst included in vcBinarySplitOperator group 30
+Info: EQ_u1_u1_815_inst included in vcBinarySplitOperator group 31
+Info: EQ_u1_u1_821_inst included in vcBinarySplitOperator group 32
+Info: EQ_u1_u1_824_inst included in vcBinarySplitOperator group 33
+Info: EQ_u1_u1_830_inst included in vcBinarySplitOperator group 34
+Info: EQ_u1_u1_833_inst included in vcBinarySplitOperator group 35
+Info: EQ_u1_u1_839_inst included in vcBinarySplitOperator group 36
+Info: EQ_u1_u1_842_inst included in vcBinarySplitOperator group 37
+Info: EQ_u1_u1_846_inst included in vcBinarySplitOperator group 38
+Info: EQ_u8_u1_558_inst included in vcBinarySplitOperator group 39
+Info: EQ_u8_u1_561_inst included in vcBinarySplitOperator group 40
+Info: EQ_u8_u1_586_inst included in vcBinarySplitOperator group 41
+Info: EQ_u8_u1_589_inst included in vcBinarySplitOperator group 42
+Info: EQ_u8_u1_593_inst included in vcBinarySplitOperator group 43
+Info: EQ_u8_u1_597_inst included in vcBinarySplitOperator group 44
+Info: EQ_u8_u1_600_inst included in vcBinarySplitOperator group 45
+Info: EQ_u8_u1_604_inst included in vcBinarySplitOperator group 46
+Info: EQ_u8_u1_609_inst included in vcBinarySplitOperator group 47
+Info: EQ_u8_u1_612_inst included in vcBinarySplitOperator group 48
+Info: EQ_u8_u1_616_inst included in vcBinarySplitOperator group 49
+Info: EQ_u8_u1_620_inst included in vcBinarySplitOperator group 50
+Info: EQ_u8_u1_623_inst included in vcBinarySplitOperator group 51
+Info: EQ_u8_u1_627_inst included in vcBinarySplitOperator group 52
+Info: EQ_u8_u1_638_inst included in vcBinarySplitOperator group 53
+Info: EQ_u8_u1_647_inst included in vcBinarySplitOperator group 54
+Info: EQ_u8_u1_665_inst included in vcBinarySplitOperator group 55
+Info: EQ_u8_u1_668_inst included in vcBinarySplitOperator group 56
+Info: EQ_u8_u1_672_inst included in vcBinarySplitOperator group 57
+Info: EQ_u8_u1_676_inst included in vcBinarySplitOperator group 58
+Info: EQ_u8_u1_679_inst included in vcBinarySplitOperator group 59
+Info: EQ_u8_u1_683_inst included in vcBinarySplitOperator group 60
+Info: EQ_u8_u1_688_inst included in vcBinarySplitOperator group 61
+Info: EQ_u8_u1_691_inst included in vcBinarySplitOperator group 62
+Info: EQ_u8_u1_695_inst included in vcBinarySplitOperator group 63
+Info: EQ_u8_u1_699_inst included in vcBinarySplitOperator group 64
+Info: EQ_u8_u1_702_inst included in vcBinarySplitOperator group 65
+Info: EQ_u8_u1_706_inst included in vcBinarySplitOperator group 66
+Info: EQ_u8_u1_717_inst included in vcBinarySplitOperator group 67
+Info: EQ_u8_u1_726_inst included in vcBinarySplitOperator group 68
+Info: EQ_u8_u1_735_inst included in vcBinarySplitOperator group 69
+Info: EQ_u8_u1_744_inst included in vcBinarySplitOperator group 70
+Info: EQ_u8_u1_765_inst included in vcBinarySplitOperator group 71
+Info: EQ_u8_u1_774_inst included in vcBinarySplitOperator group 72
+Info: EQ_u8_u1_780_inst included in vcBinarySplitOperator group 73
+Info: EQ_u8_u1_783_inst included in vcBinarySplitOperator group 74
+Info: EQ_u8_u1_788_inst included in vcBinarySplitOperator group 75
+Info: EQ_u8_u1_792_inst included in vcBinarySplitOperator group 76
+Info: EQ_u8_u1_795_inst included in vcBinarySplitOperator group 77
+Info: EQ_u8_u1_868_inst included in vcBinarySplitOperator group 78
+Info: EQ_u8_u1_876_inst included in vcBinarySplitOperator group 79
+Info: EQ_u8_u1_907_inst included in vcBinarySplitOperator group 80
+Info: NOT_u1_u1_784_inst included in vcUnarySplitOperator group 81
+Info: NOT_u1_u1_789_inst included in vcUnarySplitOperator group 82
+Info: OR_u1_u1_562_inst included in vcBinarySplitOperator group 83
+Info: OR_u1_u1_590_inst included in vcBinarySplitOperator group 84
+Info: OR_u1_u1_594_inst included in vcBinarySplitOperator group 85
+Info: OR_u1_u1_601_inst included in vcBinarySplitOperator group 86
+Info: OR_u1_u1_605_inst included in vcBinarySplitOperator group 87
+Info: OR_u1_u1_606_inst included in vcBinarySplitOperator group 88
+Info: OR_u1_u1_613_inst included in vcBinarySplitOperator group 89
+Info: OR_u1_u1_617_inst included in vcBinarySplitOperator group 90
+Info: OR_u1_u1_624_inst included in vcBinarySplitOperator group 91
+Info: OR_u1_u1_628_inst included in vcBinarySplitOperator group 92
+Info: OR_u1_u1_629_inst included in vcBinarySplitOperator group 93
+Info: OR_u1_u1_630_inst included in vcBinarySplitOperator group 94
+Info: OR_u1_u1_669_inst included in vcBinarySplitOperator group 95
+Info: OR_u1_u1_673_inst included in vcBinarySplitOperator group 96
+Info: OR_u1_u1_680_inst included in vcBinarySplitOperator group 97
+Info: OR_u1_u1_684_inst included in vcBinarySplitOperator group 98
+Info: OR_u1_u1_685_inst included in vcBinarySplitOperator group 99
+Info: OR_u1_u1_692_inst included in vcBinarySplitOperator group 100
+Info: OR_u1_u1_696_inst included in vcBinarySplitOperator group 101
+Info: OR_u1_u1_703_inst included in vcBinarySplitOperator group 102
+Info: OR_u1_u1_707_inst included in vcBinarySplitOperator group 103
+Info: OR_u1_u1_708_inst included in vcBinarySplitOperator group 104
+Info: OR_u1_u1_709_inst included in vcBinarySplitOperator group 105
+Info: OR_u1_u1_796_inst included in vcBinarySplitOperator group 106
+Info: OR_u1_u1_807_inst included in vcBinarySplitOperator group 107
+Info: OR_u1_u1_816_inst included in vcBinarySplitOperator group 108
+Info: OR_u1_u1_825_inst included in vcBinarySplitOperator group 109
+Info: OR_u1_u1_834_inst included in vcBinarySplitOperator group 110
+Info: OR_u1_u1_843_inst included in vcBinarySplitOperator group 111
+Info: OR_u1_u1_847_inst included in vcBinarySplitOperator group 112
+Info: printing VHDL global package
+Info: printing top-level system VHDL file ahir_system.unformatted_vhdl
+Info: printing VHDL model
+Info: printing VHDL model for module accessMem
+Info: resources used by CP accessMem_CP_0: ff-count=41 (saved 6), mux2-count= 22, and2-count= 4
+Info: estimated buffering for operator MUX_150_inst = 32
+Info: estimated buffering for operator W_read_write_bar_144_delayed_4_0_143_inst = 4
+Info: estimated buffering for operator array_obj_ref_136_load_0 = 32
+Info: estimated buffering in module accessMem is 68
+Info: printing VHDL model for module accessReg
+Info: resources used by CP accessReg_CP_173: ff-count=68 (saved 12), mux2-count= 37, and2-count= 7
+Info: estimated buffering for operator MUX_180_inst = 32
+Info: estimated buffering for operator MUX_189_inst = 32
+Info: estimated buffering for operator W_valid_1_171_delayed_4_0_173_inst = 4
+Info: estimated buffering for operator W_valid_2_177_delayed_4_0_182_inst = 4
+Info: estimated buffering for operator array_obj_ref_166_load_0 = 32
+Info: estimated buffering for operator array_obj_ref_171_load_0 = 32
+Info: estimated buffering in module accessReg is 136
+Info: printing VHDL model for module iExecStage
+Info: resources used by CP iExecStage_CP_456: ff-count=198 (saved 46), mux2-count= 126, and2-count= 22
+Info: estimated buffering for operator ADD_u32_u32_253_inst = 32
+Info: estimated buffering for operator AND_u32_u32_228_inst = 32
+Info: estimated buffering for operator AND_u32_u32_238_inst = 32
+Info: estimated buffering for operator CONCAT_u64_u139_475_inst = 139
+Info: estimated buffering for operator NOT_u1_u1_434_inst = 1
+Info: estimated buffering for operator OR_u32_u32_233_inst = 32
+Info: estimated buffering for operator OR_u32_u32_292_inst = 32
+Info: estimated buffering for operator SUB_u32_u32_258_inst = 32
+Info: estimated buffering for operator W_iexec_rd1_final_357_delayed_1_0_386_inst = 32
+Info: estimated buffering for operator W_iexec_rd1_final_364_delayed_1_0_398_inst = 32
+Info: estimated buffering for operator W_iexec_rd1_final_415_delayed_1_0_452_inst = 32
+Info: estimated buffering for operator W_iexec_rd2_final_358_delayed_1_0_389_inst = 32
+Info: estimated buffering for operator W_iexec_rd2_final_369_delayed_1_0_401_inst = 32
+Info: estimated buffering for operator W_iexec_rd2_final_418_delayed_1_0_455_inst = 32
+Info: estimated buffering for operator W_is_rs1_neg_404_delayed_1_0_436_inst = 1
+Info: estimated buffering for operator XOR_u32_u32_243_inst = 32
+Info: estimated buffering for operator XOR_u32_u32_248_inst = 32
+Info: estimated buffering for operator slice_207_inst = 8
+Info: estimated buffering for operator slice_211_inst = 8
+Info: estimated buffering for operator slice_215_inst = 8
+Info: estimated buffering for operator slice_219_inst = 8
+Info: estimated buffering for operator slice_223_inst = 10
+Info: estimated buffering for operator type_cast_264_inst = 32
+Info: estimated buffering for operator type_cast_270_inst = 32
+Info: estimated buffering in module iExecStage is 695
+Info: printing VHDL model for module memAccessDaemon
+Info: resources used by CP memAccessDaemon_CP_810: ff-count=13 (saved 12), mux2-count= 8, and2-count= 0
+Info: estimated buffering for operator RPIPE_accessMem_request_483_inst = 64
+Info: estimated buffering for operator call_stmt_501_call = 75
+Info: estimated buffering for operator call_stmt_501_call (call to accessMem)  = 75
+Info: estimated buffering in module memAccessDaemon is 139
+Info: printing VHDL model for module processor_daemon
+Info: resources used by CP processor_daemon_CP_891: ff-count=800 (saved 6), mux2-count= 284, and2-count= 101
+Info: estimated buffering for operator CONCAT_u16_u32_1259_inst = 224
+Info: estimated buffering for operator CONCAT_u1_u11_1307_inst = 77
+Info: estimated buffering for operator CONCAT_u24_u64_1299_inst = 448
+Info: estimated buffering for operator EQ_u8_u1_1279_inst = 7
+Info: estimated buffering for operator MUX_1141_inst = 278
+Info: estimated buffering for operator RPIPE_start_processor_924_inst = 8
+Info: estimated buffering for operator W_dcache_exec_result_1352_delayed_7_0_1281_inst = 224
+Info: estimated buffering for operator W_dcache_rd2_1365_delayed_7_0_1301_inst = 224
+Info: estimated buffering for operator W_flush_dcache_1221_delayed_4_0_1134_inst = 4
+Info: estimated buffering for operator W_flush_idecode_1058_delayed_7_0_999_inst = 7
+Info: estimated buffering for operator W_flush_iexec_1330_delayed_7_0_1249_inst = 7
+Info: estimated buffering for operator W_icache_state_1063_delayed_7_0_1008_inst = 70
+Info: estimated buffering for operator W_idecode_state_1061_delayed_7_0_1005_inst = 294
+Info: estimated buffering for operator W_iregfile_pc_1342_delayed_7_0_1261_inst = 70
+Info: estimated buffering for operator W_iretire_state_to_rs1_imm_1318_delayed_7_0_1225_inst = 7
+Info: estimated buffering for operator W_iretire_state_to_rs2_1324_delayed_7_0_1237_inst = 7
+Info: estimated buffering for operator W_reg_data_to_be_written_1319_delayed_7_0_1228_inst = 224
+Info: estimated buffering for operator W_reg_data_to_be_written_1325_delayed_7_0_1240_inst = 224
+Info: estimated buffering for operator W_stall_first_4_1060_delayed_7_0_1002_inst = 7
+Info: estimated buffering for operator call_stmt_1133_call = 309
+Info: estimated buffering for operator call_stmt_1133_call (call to iExecStage)  = 309
+Info: estimated buffering for operator call_stmt_1175_call = 150
+Info: estimated buffering for operator call_stmt_1175_call (call to accessMem)  = 150
+Info: estimated buffering for operator call_stmt_1224_call = 246
+Info: estimated buffering for operator call_stmt_1224_call (call to accessReg)  = 246
+Info: estimated buffering for operator call_stmt_989_call = 150
+Info: estimated buffering for operator call_stmt_989_call (call to accessMem)  = 150
+Info: estimated buffering for operator n_dcache_state_1142_956_buf = 139
+Info: estimated buffering for operator n_iRetire_state_1317_960_buf = 139
+Info: estimated buffering for operator n_icache_state_998_940_buf = 10
+Info: estimated buffering for operator n_idecode_state_1021_944_buf = 42
+Info: estimated buffering for operator n_iexec_state_1275_952_buf = 106
+Info: estimated buffering for operator n_iregfile_state_1030_948_buf = 42
+Info: estimated buffering for operator next_ifetch_state_1358_936_buf = 10
+Info: estimated buffering for operator phi_stmt_933 = 10
+Info: estimated buffering for operator phi_stmt_937 = 10
+Info: estimated buffering for operator phi_stmt_941 = 42
+Info: estimated buffering for operator phi_stmt_945 = 42
+Info: estimated buffering for operator phi_stmt_949 = 106
+Info: estimated buffering for operator phi_stmt_953 = 139
+Info: estimated buffering for operator phi_stmt_957 = 139
+Info: estimated buffering in module processor_daemon is 4242
+Info: printing VHDL model for module regAccessDaemon
+Info: resources used by CP regAccessDaemon_CP_1645: ff-count=26 (saved 16), mux2-count= 13, and2-count= 1
+Info: estimated buffering for operator RPIPE_accessReg_request_1388_inst = 64
+Info: estimated buffering for operator call_stmt_1427_call = 123
+Info: estimated buffering for operator call_stmt_1427_call (call to accessReg)  = 123
+Info: estimated buffering in module regAccessDaemon is 187
+Info: printing VHDL model for module scoreBoard
+Info: estimated buffering in module scoreBoard is 0
+Info: total estimated buffering in system ahir_system is 5467
+Info: finished printing VHDL model
+Info: number of register bits used in FIFO's = 528
+Info: printing Dot-file of CP for module accessMem
+Info: printing Dot-file of CP for module accessReg
+Info: printing Dot-file of CP for module iExecStage
+Info: printing Dot-file of CP for module memAccessDaemon
+Info: printing Dot-file of CP for module processor_daemon
+Info: printing Dot-file of CP for module regAccessDaemon
+Info: printing Dot-file of CP for module scoreBoard
+Info: printing Dot-file of DP for module accessMem
+Info: printing Dot-file of DP for module accessReg
+Info: printing Dot-file of DP for module iExecStage
+Info: printing Dot-file of DP for module memAccessDaemon
+Info: printing Dot-file of DP for module processor_daemon
+Info: printing Dot-file of DP for module regAccessDaemon
+Info: printing Dot-file of DP for module scoreBoard
+vhdlFormat < ahir_system_global_package.unformatted_vhdl > ahir_system_global_package.vhdl
+vhdlFormat < ahir_system.unformatted_vhdl > ahir_system.vhdl
+vhdlFormat < ahir_system_test_bench.unformatted_vhdl > ahir_system_test_bench.vhdl
+gcc -c vhdlCStubs.c  -I./src -I./ -I/home/neelam/Downloads/release/include
+gcc -c ./src/testbench.c -I/home/neelam/Downloads/release/include -I./src -I./
+gcc -o testbench_hw testbench.o vhdlCStubs.o  -L/home/neelam/Downloads/release/lib -lSocketLibPipeHandler -lpthread
+ghdl --clean
+ghdl --remove
+ghdl -i --work=GhdlLink  /home/neelam/Downloads/release/vhdl/GhdlLink.vhdl
+ghdl -i --work=aHiR_ieee_proposed  /home/neelam/Downloads/release/vhdl/aHiR_ieee_proposed.vhdl
+ghdl -i --work=ahir  /home/neelam/Downloads/release/vhdl/ahir.vhdl
+ghdl -i --work=work ahir_system_global_package.vhdl
+ghdl -i --work=work ahir_system.vhdl
+ghdl -i --work=work ahir_system_test_bench.vhdl
+ghdl -m --work=work -Wl,-L/home/neelam/Downloads/release/lib -Wl,-lVhpi ahir_system_test_bench 
+/home/neelam/Downloads/release/vhdl/aHiR_ieee_proposed.vhdl:10017:12:warning: function "or_reduce" is never referenced
+/home/neelam/Downloads/release/vhdl/aHiR_ieee_proposed.vhdl:10062:12:warning: function "and_reduce" is never referenced
+/home/neelam/Downloads/release/vhdl/aHiR_ieee_proposed.vhdl:10166:12:warning: function "qnoteq" is never referenced
+/home/neelam/Downloads/release/vhdl/aHiR_ieee_proposed.vhdl:10236:12:warning: function "is_x" is never referenced
+analyze /home/neelam/Downloads/release/vhdl/aHiR_ieee_proposed.vhdl
+/home/neelam/Downloads/release/vhdl/aHiR_ieee_proposed.vhdl:909:12:warning: function "or_reduce" is never referenced
+/home/neelam/Downloads/release/vhdl/aHiR_ieee_proposed.vhdl:954:12:warning: function "and_reduce" is never referenced
+/home/neelam/Downloads/release/vhdl/aHiR_ieee_proposed.vhdl:1058:12:warning: function "qnoteq" is never referenced
+/home/neelam/Downloads/release/vhdl/aHiR_ieee_proposed.vhdl:1128:12:warning: function "is_x" is never referenced
+/home/neelam/Downloads/release/vhdl/aHiR_ieee_proposed.vhdl:5463:12:warning: function "or_reduce" is never referenced
+/home/neelam/Downloads/release/vhdl/aHiR_ieee_proposed.vhdl:5508:12:warning: function "and_reduce" is never referenced
+/home/neelam/Downloads/release/vhdl/aHiR_ieee_proposed.vhdl:5612:12:warning: function "qnoteq" is never referenced
+/home/neelam/Downloads/release/vhdl/aHiR_ieee_proposed.vhdl:5682:12:warning: function "is_x" is never referenced
+/home/neelam/Downloads/release/vhdl/aHiR_ieee_proposed.vhdl:10017:12:warning: function "or_reduce" is never referenced
+/home/neelam/Downloads/release/vhdl/aHiR_ieee_proposed.vhdl:10062:12:warning: function "and_reduce" is never referenced
+/home/neelam/Downloads/release/vhdl/aHiR_ieee_proposed.vhdl:10166:12:warning: function "qnoteq" is never referenced
+/home/neelam/Downloads/release/vhdl/aHiR_ieee_proposed.vhdl:10236:12:warning: function "is_x" is never referenced
+analyze /home/neelam/Downloads/release/vhdl/ahir.vhdl
+analyze /home/neelam/Downloads/release/vhdl/GhdlLink.vhdl
+analyze ahir_system_global_package.vhdl
+analyze ahir_system_test_bench.vhdl
+analyze ahir_system.vhdl
+elaborate ahir_system_test_bench
+rm -rf aa2c
+mkdir aa2c
+Aa2C -P simple_proc_ -o aa2c -T memAccessDaemon -T regAccessDaemon -T processor_daemon  prog.linked.opt.aa 
+Info: C function name prefix set to simple_proc_. 
+Info: C output directory set to aa2c. 
+Info: marked memAccessDaemon as a top-level daemon. 
+Info: marked regAccessDaemon as a top-level daemon. 
+Info: marked processor_daemon as a top-level daemon. 
+Info: Added module accessMem
+Info: Added module accessReg
+Info: Added module global_storage_initializer_
+Info: Added module iExecStage
+Info: Added module memAccessDaemon
+Info: Added module scoreBoard
+Info: Added module processor_daemon
+Info: Added module regAccessDaemon
+Info: elaborating the program .... initializing the call-graph
+Info: mapping target object references..
+Info: mapping source object references..
+Info: checking for cycles in the call-graph ... 
+Info: module order:
+	accessMem
+	accessReg
+	global_storage_initializer_
+	iExecStage
+	memAccessDaemon
+	scoreBoard
+	processor_daemon
+	regAccessDaemon
+Info: marking modules reachable from root-modules ... 
+Info: module accessMem is reachable from a specified root module.
+Info: module accessReg is reachable from a specified root module.
+Info: module global_storage_initializer_ is reachable from a specified root module.
+Info: module iExecStage is reachable from a specified root module.
+Info: module memAccessDaemon is reachable from a specified root module.
+Info: module processor_daemon is reachable from a specified root module.
+Info: module scoreBoard is reachable from a specified root module.
+Info: module regAccessDaemon is reachable from a specified root module.
+Info: propagating types in the program ... 
+Info: coalescing storage into distinct memory spaces ... 
+Info: Marking foreign pointers in modules which are not called from the program
+Info: Coalescing storage from native objects..
+Info: Finished coalescing storage.. identified 2 disjoint memory space(s)
+Info: Memory space 0: mem_array 
+Info: Memory space 1: reg_array 
+Info: propagating constants in the program ... 
+gcc -g -c -I /home/neelam/Downloads/release/include -I aa2c/ -o aa2c/simple_proc_aa_c_model.o aa2c/simple_proc_aa_c_model.c
+gcc -g -c -I /home/neelam/Downloads/release/include -I aa2c/ -D AA2C -o aa2c/testbench.o ./src/testbench.c
+gcc -g -o testbench_aa2c aa2c/testbench.o aa2c/simple_proc_aa_c_model.o -lBitVectors -lSockPipes -lPipeHandlerDebugPthreads -lpthread -L /home/neelam/Downloads/release/lib 

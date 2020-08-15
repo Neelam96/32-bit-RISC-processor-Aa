@@ -1,0 +1,337 @@
+$constant  ADD : $uint<8>:= 9  
+$constant  BN : $uint<8>:= 15  
+$constant  BZ : $uint<8>:= 14  
+$constant  CALL : $uint<8>:= 16  
+$constant  CMP : $uint<8>:= 18  
+$constant  HALT : $uint<8>:= 1  
+$constant  JMP : $uint<8>:= 17  
+$constant  LOAD : $uint<8>:= 3  
+$constant  L_AND : $uint<8>:= 5  
+$constant  L_OR : $uint<8>:= 6  
+$constant  L_SLL : $uint<8>:= 11  
+$constant  L_SRA : $uint<8>:= 13  
+$constant  L_SRL : $uint<8>:= 12  
+$constant  L_XNOR : $uint<8>:= 7  
+$constant  L_XOR : $uint<8>:= 8  
+$constant  SBIR : $uint<8>:= 2  
+$constant  STORE : $uint<8>:= 4  
+$constant  SUB : $uint<8>:= 10  
+$pipe  accessMem_request : $uint<64>  $depth 2 
+// can point into 
+$pipe  accessMem_response : $uint<32>  $depth 2 
+// can point into 
+$pipe  accessReg_request : $uint<64>  $depth 2 
+// can point into 
+$pipe  accessReg_response1 : $uint<32>  $depth 2 
+// can point into 
+$pipe  accessReg_response2 : $uint<32>  $depth 2 
+// can point into 
+$constant  byte_mask_3_bytes : $uint<32>:= 4294967040  
+$storage  mem_array : $array[1024] $of $uint<32> // memory space index = 1  base address = 0  word size = 32
+// can point into 
+$constant  minus_1 : $uint<32>:= 4294967295  
+$constant  one_1 : $uint<1>:= 1  
+$constant  one_10 : $uint<10>:= 1  
+$constant  one_32 : $uint<32>:= 1  
+$constant  one_8 : $uint<8>:= 1  
+$pipe  processor_result : $uint<32>  $depth 2 
+// can point into 
+$constant  read_signal : $uint<1>:= 1  
+$storage  reg_array : $array[64] $of $uint<32> // memory space index = 0  base address = 0  word size = 32
+// can point into 
+$pipe  start_processor : $uint<8>  $depth 2 
+// can point into 
+$constant  thirty_one_32 : $uint<32>:= 31  
+$constant  thirty_two_32 : $uint<32>:= 32  
+$constant  write_signal : $uint<1>:= 0  
+$constant  zero_1 : $uint<1>:= 0  
+$constant  zero_10 : $uint<10>:= 0  
+$constant  zero_106 : $uint<106>:= 0  
+$constant  zero_139 : $uint<139>:= 0  
+$constant  zero_171 : $uint<171>:= 0  
+$constant  zero_32 : $uint<32>:= 0  
+$constant  zero_42 : $uint<42>:= 0  
+$constant  zero_8 : $uint<8>:= 0  
+$pipeline $depth 7 $buffering 1 $module [accessMem]
+$in ( read_write_bar : $uint<1>   addr : $uint<10>   write_data : $uint<32>  )
+$out ( read_data : $uint<32>  )
+$is
+{
+  $guard (read_write_bar) t_read_data := mem_array[addr]// bits of buffering = 32. 
+  $guard (~read_write_bar) mem_array[addr] := write_data// bits of buffering = 32. 
+  read_data := ( $mux read_write_bar t_read_data  0  ) // bits of buffering = 32. 
+}
+$pipeline $depth 7 $buffering 1 $module [accessReg]
+$in ( valid_1 : $uint<1>   addr_1 : $uint<8>   valid_2 : $uint<1>   addr_2 : $uint<8>   valid_w : $uint<1>   addr_w : $uint<8>   data_to_be_written : $uint<32>  )
+$out ( read_data_1 : $uint<32>   read_data_2 : $uint<32>  )
+$is
+{
+  $guard (valid_1) t_read_data_1 := reg_array[addr_1]// bits of buffering = 32. 
+  $guard (valid_2) t_read_data_2 := reg_array[addr_2]// bits of buffering = 32. 
+  read_data_1 := ( $mux valid_1 t_read_data_1  0  ) // bits of buffering = 32. 
+  read_data_2 := ( $mux valid_2 t_read_data_2  0  ) // bits of buffering = 32. 
+  $guard (valid_w) reg_array[addr_w] := data_to_be_written// bits of buffering = 32. 
+}
+$module [global_storage_initializer_]
+$in ()
+$out ()
+$is
+{
+  $null
+}
+$pipeline $depth 7 $buffering 1 $module [iExecStage]
+$in ( iexec_state : $uint<106>   iexec_rd1_final : $uint<32>   iexec_rd2_final : $uint<32>  )
+$out ( next_dcache_state : $uint<139>  )
+$is
+{
+  opcode := ( $slice iexec_state 105 98 ) // bits of buffering = 8. 
+  rs1_imm := ( $slice iexec_state 97 90 ) // bits of buffering = 8. 
+  rs2 := ( $slice iexec_state 89 82 ) // bits of buffering = 8. 
+  rd := ( $slice iexec_state 81 74 ) // bits of buffering = 8. 
+  rd1 := ( $slice iexec_state 73 42 ) // bits of buffering = 32.  Orphaned statement with target rd1 ?? 
+  rd2 := ( $slice iexec_state 41 10 ) // bits of buffering = 32.  Orphaned statement with target rd2 ?? 
+  program_cnt := ( $slice iexec_state 9 0 ) // bits of buffering = 10. 
+  $volatile exec_result_initial := ((((( $mux (opcode == SBIR) ((iexec_rd2_final & byte_mask_3_bytes) | ($bitcast ($uint<32>) rs1_imm ))  _b0  )  | ( $mux (opcode == L_AND) (iexec_rd1_final & iexec_rd2_final)  _b0  ) ) | ( $mux (opcode == L_OR) (iexec_rd1_final | iexec_rd2_final)  _b0  ) ) | ((( $mux (opcode == L_XNOR) (iexec_rd1_final ~^ iexec_rd2_final)  _b0  )  | ( $mux (opcode == L_XOR) (iexec_rd1_final ^ iexec_rd2_final)  _b0  ) ) | ( $mux (opcode == ADD) (iexec_rd1_final + iexec_rd2_final)  _b0  ) )) | (((( $mux (opcode == SUB) (iexec_rd1_final - iexec_rd2_final)  _b0  )  | ( $mux (opcode == L_SLL) ($bitcast ($uint<32>) (iexec_rd1_final << iexec_rd2_final) )  _b0  ) ) | ( $mux (opcode == L_SRL) ($bitcast ($uint<32>) (iexec_rd1_final >> iexec_rd2_final) )  _b0  ) ) | (( $mux (opcode == CMP) ((( $mux (iexec_rd1_final == iexec_rd2_final) zero_32  _b0  )  | ( $mux (iexec_rd1_final < iexec_rd2_final) minus_1  _b0  ) ) | ( $mux (iexec_rd1_final > iexec_rd2_final) one_32  _b0  ) )  _b0  )  | ( $mux (opcode == CALL) ($bitcast ($uint<32>) (program_cnt + 1 ) )  _b0  ) )))
+  $volatile is_SRA := ( $mux (opcode == L_SRA) one_1  zero_1 ) 
+  $guard (is_SRA) $volatile bottom_bits := (iexec_rd1_final >> iexec_rd2_final)
+  $guard (is_SRA) $volatile top_bits := ((zero_32 - (iexec_rd1_final >> thirty_one_32)) << (thirty_two_32 - iexec_rd2_final))
+  $guard (is_SRA) $volatile result_for_SRA := (top_bits | bottom_bits)
+  $volatile exec_result := ( $mux is_SRA result_for_SRA  exec_result_initial ) 
+  $volatile is_rs1_neg := ( $slice iexec_rd1_final 31 31 ) 
+  $volatile unused_bits := ( $slice iexec_rd1_final 30 0 ) 
+  $volatile is_Branch := (((opcode == BZ) & ( ~ is_rs1_neg )) | ((opcode == BN) & is_rs1_neg))
+  next_dcache_state := ((((opcode && rs1_imm) && rs2) && (rd && iexec_rd1_final)) && ((iexec_rd2_final && exec_result) && (is_Branch && program_cnt)))// bits of buffering = 139. 
+}
+$module [memAccessDaemon]
+$in ()
+$out ()
+$is
+{
+  $branchblock [loop]
+  {
+    $dopipeline $depth 20 $buffering 2
+    $fullrate 
+    $merge $entry $loopback 
+    $endmerge
+    cmd_1 := accessMem_request// bits of buffering = 64. 
+    $volatile wdata := ( $slice cmd_1 63 32 ) 
+    $volatile addr := ( $slice cmd_1 31 22 ) 
+    $volatile unused := ( $slice cmd_1 21 1 ) 
+    $volatile rwbar := ( $slice cmd_1 0 0 ) 
+    $call accessMem (rwbar addr wdata ) (rdata ) 
+    accessMem_response := rdata// bits of buffering = 32. 
+    $while 1 
+  }
+}
+$volatile $module [scoreBoard]
+$in ( ifetch_state : $uint<10>   icache_state : $uint<10>   idecode_state : $uint<42>   iregfile_state : $uint<42>   iexec_state : $uint<106>   dcache_state : $uint<139>   iretire_state : $uint<139>  )
+$out ( ifetch_actions : $uint<10>   icache_actions : $uint<10>   idecode_actions : $uint<42>   iregfile_actions : $uint<5>   iexec_actions : $uint<4>   dcache_actions : $uint<3>   ex_Unconditional_JUMP : $uint<1>   is_Branch_Hazard : $uint<1>   flush_ifetch : $uint<1>   flush_icache : $uint<1>   flush_idecode : $uint<1>   flush_reg : $uint<1>   flush_iexec : $uint<1>   flush_dcache : $uint<1>   stall_first_4 : $uint<1>  )
+$is
+{
+  $volatile dcache_state_first := ( $slice dcache_state 138 11 ) 
+  $volatile is_Branch := ( $slice dcache_state 10 10 ) 
+  $volatile dcache_state_second := ( $slice dcache_state 9 0 ) 
+  $volatile ex_opcode := ( $slice iexec_state 105 98 ) 
+  $volatile ex_rs1_imm := ( $slice iexec_state 97 90 ) 
+  $volatile ex_rs2 := ( $slice iexec_state 89 82 ) 
+  $volatile ex_rd := ( $slice iexec_state 81 74 ) 
+  $volatile ex_rd1 := ( $slice iexec_state 73 42 ) 
+  $volatile ex_rd2 := ( $slice iexec_state 41 10 ) 
+  $volatile ex_pc := ( $slice iexec_state 9 0 ) 
+  $volatile ex_Unconditional_JUMP := ((ex_opcode == CALL) | (ex_opcode == JMP))
+  $volatile is_Branch_Hazard := is_Branch
+  $volatile dcache_opcode := ( $slice dcache_state 138 131 ) 
+  $volatile dcache_rs1_imm := ( $slice dcache_state 130 123 ) 
+  $volatile dcache_rs2 := ( $slice dcache_state 122 115 ) 
+  $volatile dcache_rd := ( $slice dcache_state 114 107 ) 
+  $volatile dcache_rd1 := ( $slice dcache_state 106 75 ) 
+  $volatile dcache_rd2 := ( $slice dcache_state 74 43 ) 
+  $volatile dcache_second := ( $slice dcache_state 42 0 ) 
+  $volatile dcache_state_reg_write := (((((dcache_opcode == SBIR) | (dcache_opcode == LOAD)) | (dcache_opcode == L_AND)) | (((dcache_opcode == L_OR) | (dcache_opcode == L_XNOR)) | (dcache_opcode == ADD))) | ((((dcache_opcode == SUB) | (dcache_opcode == L_SLL)) | (dcache_opcode == L_SRL)) | (((dcache_opcode == L_SRA) | (dcache_opcode == CALL)) | (dcache_opcode == CMP))))
+  $volatile dcache_to_ex_rs1_imm := ((dcache_state_reg_write == one_1) & (dcache_rd == ex_rs1_imm))
+  $volatile dcache_to_ex_rs2 := ((dcache_state_reg_write == one_1) & (dcache_rd == ex_rs2))
+  $volatile iretire_opcode := ( $slice iretire_state 138 131 ) 
+  $volatile iretire_rs1_imm := ( $slice iretire_state 130 123 ) 
+  $volatile iretire_rs2 := ( $slice iretire_state 122 115 ) 
+  $volatile iretire_rd := ( $slice iretire_state 114 107 ) 
+  $volatile iretire_state_second := ( $slice iretire_state 106 0 ) 
+  $volatile iretire_state_reg_write := (((((iretire_opcode == SBIR) | (iretire_opcode == LOAD)) | (iretire_opcode == L_AND)) | (((iretire_opcode == L_OR) | (iretire_opcode == L_XNOR)) | (iretire_opcode == ADD))) | ((((iretire_opcode == SUB) | (iretire_opcode == L_SLL)) | (iretire_opcode == L_SRL)) | (((iretire_opcode == L_SRA) | (iretire_opcode == CALL)) | (iretire_opcode == CMP))))
+  $volatile iretire_state_to_ex_rs1_imm := ((iretire_state_reg_write == one_1) & (iretire_rd == ex_rs1_imm))
+  $volatile iretire_state_to_ex_rs2 := ((iretire_state_reg_write == one_1) & (iretire_rd == ex_rs2))
+  $volatile iretire_state_to_dcache_addr := ((iretire_state_reg_write == one_1) & (dcache_rs1_imm == iretire_rd))
+  $volatile iretire_state_to_dcache_memData := ((iretire_state_reg_write == one_1) & (dcache_rs2 == iretire_rd))
+  $volatile iregfile_opcode := ( $slice iregfile_state 41 34 ) 
+  $volatile iregfile_rs1_imm := ( $slice iregfile_state 33 26 ) 
+  $volatile iregfile_rs2 := ( $slice iregfile_state 25 18 ) 
+  $volatile iregfile_rd := ( $slice iregfile_state 17 10 ) 
+  $volatile iregfile_pc := ( $slice iregfile_state 9 0 ) 
+  $volatile iretire_state_to_rs1_imm := ((iretire_state_reg_write == one_1) & (iretire_rd == iregfile_rs1_imm))
+  $volatile iretire_state_to_rs2 := ((iretire_state_reg_write == one_1) & (iretire_rd == iregfile_rs2))
+  $volatile stall_first_4 := (((ex_opcode == LOAD) & ( ~ (iregfile_opcode == zero_8) )) & (( ~ (iregfile_opcode == STORE) ) & ((iretire_rs1_imm == ex_rd) | (iregfile_rs2 == ex_rd))))
+  $volatile flush_ifetch := ((is_Branch == one_1) | (ex_Unconditional_JUMP == one_1))
+  $volatile flush_icache := ((is_Branch == one_1) | (ex_Unconditional_JUMP == one_1))
+  $volatile flush_idecode := ((is_Branch == one_1) | (ex_Unconditional_JUMP == one_1))
+  $volatile flush_reg := ((is_Branch == one_1) | (ex_Unconditional_JUMP == one_1))
+  $volatile flush_iexec := (((is_Branch == one_1) | (ex_Unconditional_JUMP == one_1)) | (stall_first_4 == one_1))
+  $volatile flush_dcache := is_Branch
+  $volatile ifetch_actions := ifetch_state
+  $volatile icache_actions := icache_state
+  $volatile idecode_actions := idecode_state
+  $volatile iregfile_state_opcode := ( $slice iregfile_state 41 34 ) 
+  $volatile iregfile_state_rs1_imm := ( $slice iregfile_state 33 26 ) 
+  $volatile iregfile_state_rs2 := ( $slice iregfile_state 25 18 ) 
+  $volatile iregfile_state_rd := ( $slice iregfile_state 17 10 ) 
+  $volatile iregfile_state_pc := ( $slice iregfile_state 9 0 ) 
+  $volatile reg_valid_read1 := ( $mux (iregfile_state_opcode == 0 ) zero_1  one_1 ) 
+  $volatile reg_valid_read2 := ( $mux (iregfile_state_opcode == 0 ) zero_1  one_1 ) 
+  $volatile reg_valid_write := iretire_state_reg_write
+  $volatile ret_opcode := ( $slice iretire_state 138 131 ) 
+  $volatile ret_rs1_imm := ( $slice iretire_state 130 123 ) 
+  $volatile ret_rs2 := ( $slice iretire_state 122 115 ) 
+  $volatile ret_rd := ( $slice iretire_state 114 107 ) 
+  $volatile ret_rd1 := ( $slice iretire_state 106 75 ) 
+  $volatile ret_rd2 := ( $slice iretire_state 74 43 ) 
+  $volatile ret_exec_result_memData := ( $slice iretire_state 42 11 ) 
+  $volatile ret_isBrach := ( $slice iretire_state 10 10 ) 
+  $volatile ret_pc := ( $slice iretire_state 9 0 ) 
+  $volatile iregfile_actions := (((reg_valid_read1 && reg_valid_read2) && reg_valid_write) && (iretire_state_to_rs1_imm && iretire_state_to_rs2))
+  $volatile iexec_actions := ((dcache_to_ex_rs1_imm && dcache_to_ex_rs2) && (iretire_state_to_ex_rs1_imm && iretire_state_to_ex_rs2))
+  $volatile memWrite := ( $mux (dcache_opcode == STORE) zero_1  one_1 ) 
+  $volatile dcache_actions := ((memWrite && iretire_state_to_dcache_addr) && iretire_state_to_dcache_memData)
+}
+$module [processor_daemon]
+$in ()
+$out ()
+$is
+{
+  $branchblock [check_start]
+  {
+    $merge $entry check_for_start 
+    $endmerge
+    cmd := start_processor// bits of buffering = 8. 
+    $if (cmd == one_8) $then 
+    $branchblock [loop]
+    {
+      $dopipeline $depth 15 $buffering 2
+      $fullrate 
+      $merge $entry $loopback 
+      $phi ifetch_state := 				  one_10 $on   $entry 				  next_ifetch_state $on   $loopback 
+      // type of target is $uint<10>
+      $phi icache_state := 				  _b0  $on   $entry 				  n_icache_state $on   $loopback 
+      // type of target is $uint<10>
+      $phi idecode_state := 				  _b0  $on   $entry 				  n_idecode_state $on   $loopback 
+      // type of target is $uint<42>
+      $phi iregfile_state := 				  _b0  $on   $entry 				  n_iregfile_state $on   $loopback 
+      // type of target is $uint<42>
+      $phi iexec_state := 				  _b0  $on   $entry 				  n_iexec_state $on   $loopback 
+      // type of target is $uint<106>
+      $phi dcache_state := 				  _b0  $on   $entry 				  n_dcache_state $on   $loopback 
+      // type of target is $uint<139>
+      $phi iretire_state := 				  _b0  $on   $entry 				  n_iRetire_state $on   $loopback 
+      // type of target is $uint<139>
+      $endmerge
+      $volatile 				$call scoreBoard (ifetch_state icache_state idecode_state iregfile_state iexec_state dcache_state iretire_state ) (ifetch_actions icache_actions idecode_actions iregfile_actions iexec_actions dcache_actions ex_Unconditional_JUMP is_Branch_Hazard flush_ifetch flush_icache flush_idecode flush_reg flush_iexec flush_dcache stall_first_4 ) 
+      $call accessMem (read_signal icache_state zero_32 ) (icache_instruction ) 
+      $volatile n_icache_state := ( $mux flush_icache zero_10  ( $mux stall_first_4 icache_state  ifetch_state )  ) 
+      $volatile n_idecode_state := ( $mux flush_idecode zero_42  ( $mux stall_first_4 idecode_state  (icache_instruction && icache_state) )  ) 
+      $volatile n_iregfile_state := ( $mux flush_reg zero_42  ( $mux stall_first_4 iregfile_state  idecode_state )  ) 
+      $volatile iregfile_instruction := ( $slice iregfile_state 41 10 ) 
+      $volatile iregfile_pc := ( $slice iregfile_state 9 0 ) 
+      $volatile iexec_opcode := ( $slice iexec_state 105 98 ) 
+      $volatile iexec_rs1_imm := ( $slice iexec_state 97 90 ) 
+      $volatile iexec_rs2 := ( $slice iexec_state 89 82 ) 
+      $volatile iexec_rd := ( $slice iexec_state 81 74 ) 
+      $volatile iexec_rd1 := ( $slice iexec_state 73 42 ) 
+      $volatile iexec_rd2 := ( $slice iexec_state 41 10 ) 
+      $volatile iexec_pc := ( $slice iexec_state 9 0 ) 
+      $volatile dcache_opcode := ( $slice dcache_state 138 131 ) 
+      $volatile dcache_rs1_imm := ( $slice dcache_state 130 123 ) 
+      $volatile dcache_rs2 := ( $slice dcache_state 122 115 ) 
+      $volatile dcache_rd := ( $slice dcache_state 114 107 ) 
+      $volatile dcache_rd1 := ( $slice dcache_state 106 75 ) 
+      $volatile dcache_rd2 := ( $slice dcache_state 74 43 ) 
+      $volatile dcache_exec_result := ( $slice dcache_state 42 11 ) 
+      $volatile dcache_isBranch := ( $slice dcache_state 10 10 ) 
+      $volatile dcache_pc := ( $slice dcache_state 9 0 ) 
+      $volatile iretire_opcode := ( $slice iretire_state 138 131 ) 
+      $volatile iretire_rs1_imm := ( $slice iretire_state 130 123 ) 
+      $volatile iretire_rs2 := ( $slice iretire_state 122 115 ) 
+      $volatile iretire_rd := ( $slice iretire_state 114 107 ) 
+      $volatile iretire_data := ( $slice iretire_state 106 43 ) 
+      $volatile iretire_exec_result_memData := ( $slice iretire_state 42 11 ) 
+      $volatile iretire_branch := ( $slice iretire_state 10 10 ) 
+      $volatile iretire_pc := ( $slice iretire_state 9 0 ) 
+      $volatile dcache_to_ex_rs1_imm := ( $slice iexec_actions 3 3 ) 
+      $volatile dcache_to_ex_rs2 := ( $slice iexec_actions 2 2 ) 
+      $volatile iretire_state_to_ex_rs1_imm := ( $slice iexec_actions 1 1 ) 
+      $volatile iretire_state_to_ex_rs2 := ( $slice iexec_actions 0 0 ) 
+      $volatile iexec_rd1_final := ( $mux dcache_to_ex_rs1_imm dcache_exec_result  ( $mux iretire_state_to_ex_rs1_imm iretire_exec_result_memData  iexec_rd1 )  ) 
+      $volatile iexec_rd2_final := ( $mux dcache_to_ex_rs2 dcache_exec_result  ( $mux iretire_state_to_ex_rs2 iretire_exec_result_memData  iexec_rd2 )  ) 
+      $call iExecStage (iexec_state iexec_rd1_final iexec_rd2_final ) (n_dcache_state_from_exec ) 
+      n_dcache_state := ( $mux flush_dcache zero_139  n_dcache_state_from_exec ) // bits of buffering = 139. 
+      $volatile memWrite := ( $slice dcache_actions 2 2 ) 
+      $volatile iretire_state_to_dcache_addr := ( $slice dcache_actions 1 1 ) 
+      $volatile iretire_state_to_dcache_memData := ( $slice dcache_actions 0 0 ) 
+      $volatile memWriteData := ( $mux iretire_state_to_dcache_memData iretire_exec_result_memData  dcache_rd2 ) 
+      $volatile final_memAddr_32 := ( $mux iretire_state_to_dcache_addr iretire_exec_result_memData  dcache_rd1 ) 
+      $volatile unused := ( $slice final_memAddr_32 31 10 ) 
+      $volatile memAddr := ( $slice final_memAddr_32 9 0 ) 
+      $call accessMem (memWrite memAddr memWriteData ) (memReadData ) 
+      $volatile reg_valid_read1 := ( $slice iregfile_actions 4 4 ) 
+      $volatile reg_valid_read2 := ( $slice iregfile_actions 3 3 ) 
+      $volatile reg_valid_write := ( $slice iregfile_actions 2 2 ) 
+      $volatile iretire_state_to_rs1_imm := ( $slice iregfile_actions 1 1 ) 
+      $volatile iretire_state_to_rs2 := ( $slice iregfile_actions 0 0 ) 
+      $volatile reg_opcode := ( $slice iregfile_state 41 34 ) 
+      $volatile reg_rs1_imm := ( $slice iregfile_state 33 26 ) 
+      $volatile reg_rs2 := ( $slice iregfile_state 25 18 ) 
+      $volatile reg_rd := ( $slice iregfile_state 17 10 ) 
+      $volatile reg_pc := ( $slice iregfile_state 9 0 ) 
+      $volatile reg_data_to_be_written := iretire_exec_result_memData
+      $call accessReg (reg_valid_read1 reg_rs1_imm reg_valid_read2 reg_rs2 reg_valid_write iretire_rd reg_data_to_be_written ) (reg_d1 reg_d2 ) 
+      $volatile final_rd1 := ( $mux iretire_state_to_rs1_imm reg_data_to_be_written  reg_d1 ) 
+      $volatile final_rd2 := ( $mux iretire_state_to_rs2 reg_data_to_be_written  reg_d2 ) 
+      $volatile n_iexec_state := ( $mux flush_iexec zero_106  (((reg_opcode && reg_rs1_imm) && (reg_rs2 && reg_rd)) && ((final_rd1 && final_rd2) && iregfile_pc)) ) 
+      $volatile dcache_data_to_be_written_to_reg := ( $mux (dcache_opcode == LOAD) memReadData  dcache_exec_result ) 
+      $volatile n_iRetire_state := ((((dcache_opcode && dcache_rs1_imm) && dcache_rs2) && (dcache_rd && dcache_rd1)) && ((dcache_rd2 && dcache_data_to_be_written_to_reg) && (dcache_isBranch && dcache_pc)))
+      $volatile iretire_to_dcache_addr_32 := ( $mux (dcache_rs2 == iretire_rd) iretire_exec_result_memData  dcache_rd2 ) 
+      $volatile dcache_to_ex_addr_32 := ( $mux (dcache_rd == iexec_rs1_imm) dcache_exec_result  ( $mux (iretire_rd == iexec_rs1_imm) iretire_exec_result_memData  iexec_rd1 )  ) 
+      $volatile next_ifetch_state_32 := ( $mux is_Branch_Hazard iretire_to_dcache_addr_32  ( $mux ex_Unconditional_JUMP dcache_to_ex_addr_32  ( $mux stall_first_4 ($bitcast ($uint<32>) ifetch_state )  ($bitcast ($uint<32>) (ifetch_state + 1 ) ) )  )  ) 
+      $volatile next_ifetch_state_22 := ( $slice next_ifetch_state_32 31 10 ) 
+      $volatile next_ifetch_state := ( $slice next_ifetch_state_32 9 0 ) 
+      $report (processor_daemon processor 				 ifetch_state ifetch_state 				 icache_state icache_state 				 idecode_state idecode_state 				 iregfile_state iregfile_state 				 iexec_state iexec_state 				 dcache_state dcache_state 				 iretire_state iretire_state 				 reg_data_to_be_written reg_data_to_be_written 				 iretire_opcode iretire_opcode 				 icache_instruction icache_instruction )
+      processor_result := reg_data_to_be_written// bits of buffering = 32. 
+      $while ( ~ (iretire_opcode == HALT) )
+    }
+    $place[check_for_start]
+    $endif
+  }
+}
+$module [regAccessDaemon]
+$in ()
+$out ()
+$is
+{
+  $branchblock [loop]
+  {
+    $dopipeline $depth 20 $buffering 2
+    $fullrate 
+    $merge $entry $loopback 
+    $endmerge
+    cmd_1 := accessReg_request// bits of buffering = 64. 
+    $volatile valid_1 := ( $slice cmd_1 63 63 ) 
+    $volatile addr1 := ( $slice cmd_1 62 55 ) 
+    $volatile valid_2 := ( $slice cmd_1 54 54 ) 
+    $volatile addr2 := ( $slice cmd_1 53 46 ) 
+    $volatile unused := ( $slice cmd_1 45 41 ) 
+    $volatile valid_w := ( $slice cmd_1 40 40 ) 
+    $volatile addr_w := ( $slice cmd_1 39 32 ) 
+    $volatile data_to_be_written := ( $slice cmd_1 31 0 ) 
+    $call accessReg (valid_1 addr1 valid_2 addr2 valid_w addr_w data_to_be_written ) (rdata1 rdata2 ) 
+    accessReg_response1 := rdata1// bits of buffering = 32. 
+    accessReg_response2 := rdata2// bits of buffering = 32. 
+    $while 1 
+  }
+}
+// Memory space 0: reg_array 
+// Memory space 1: mem_array 
