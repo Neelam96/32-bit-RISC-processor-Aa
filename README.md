@@ -11,7 +11,7 @@ Can be found in ```ISA.txt```
  
  Refer to the report ```report assignment 2.pdf``` for simple processor's working
  
- Refer to the ```project 2 report-pipelined``` report for pipelined processor working
+ Refer to the report ```project 2 report-pipelined.pdf```  for pipelined processor's working
  
  ## Aa files and Testbench
  ```pipelined_processor_working/pipelined_processor/src/``` for pipelined processor
